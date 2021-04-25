@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kyle Wood <demonwav@gmail.com>
+Date: Sat, 24 Apr 2021 20:50:38 -0500
+Subject: [PATCH] Switch to AtomicInteger for chatSpamTickCount
+
+
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 70b5ac18bcab5bbb46b1e206b512e5a1c8131748..861efdeb98bd7321afffe4780df7df1fadb2d9d9 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -222,8 +222,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
+     private boolean keepAlivePending;
+     private long keepAliveChallenge;
+     // CraftBukkit start - multithreaded fields
+-    private volatile int chatSpamTickCount;
+-    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(ServerGamePacketListenerImpl.class, "chatThrottle");
++    private final java.util.concurrent.atomic.AtomicInteger chatSpamTickCount = new java.util.concurrent.atomic.AtomicInteger(0); // Paper - switch to AtomicInteger
+     // CraftBukkit end
+     private int dropSpamTickCount;
+     private final Int2ShortMap expectedAcks = new Int2ShortOpenHashMap();
+@@ -351,7 +350,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
+ 
+         this.server.getProfiler().pop();
+         // CraftBukkit start
+-        for (int spam; (spam = this.chatSpamTickCount) > 0 && !ServerGamePacketListenerImpl.chatSpamField.compareAndSet(this, spam, spam - 1); ) ;
++        for (int spam; (spam = this.chatSpamTickCount.get()) > 0 && !this.chatSpamTickCount.compareAndSet(spam, spam - 1); ) ; // Paper - switch to AtomicInteger
+         /* Use thread-safe field access instead
+         if (this.chatThrottle > 0) {
+             --this.chatThrottle;
+@@ -702,7 +701,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
+     public void handleCustomCommandSuggestions(ServerboundCommandSuggestionPacket packet) {
+         PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());
+         // CraftBukkit start
+-        if (ServerGamePacketListenerImpl.chatSpamField.addAndGet(this, 1) > 500 && !this.server.getPlayerList().isOp(this.player.getGameProfile())) {
++        if (this.chatSpamTickCount.incrementAndGet() > 500 && !this.server.getPlayerList().isOp(this.player.getGameProfile())) { // Paper - switch to AtomicInteger
+             this.disconnect(new TranslatableComponent("disconnect.spam", new Object[0]));
+             return;
+         }
+@@ -1811,7 +1810,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
+             // Spigot end
+             // CraftBukkit start - replaced with thread safe throttle
+             // this.chatThrottle += 20;
+-            if (counted && ServerGamePacketListenerImpl.chatSpamField.addAndGet(this, 20) > 200 && !this.server.getPlayerList().isOp(this.player.getGameProfile())) { // Spigot
++            if (counted && this.chatSpamTickCount.addAndGet(20) > 200 && !this.server.getPlayerList().isOp(this.player.getGameProfile())) { // Spigot // Paper - switch to AtomicInteger
+                 if (!isSync) {
+                     Waitable waitable = new Waitable() {
+                         @Override
