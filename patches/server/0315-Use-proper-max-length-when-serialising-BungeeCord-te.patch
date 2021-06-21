@@ -6,7 +6,7 @@ Subject: [PATCH] Use proper max length when serialising BungeeCord text
 
 
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
-index a64780b4b49d01322d8f755ff540a9622c89e983..26a229f7aa3f4425ed572e2d50730b4e978bf33e 100644
+index ea1cef1a070bbc1aa7e355d89fe3f4091ee3d1ce..71f1fbebcc7bcf2f5a187d913f7708c5a1893bda 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
 @@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ index a64780b4b49d01322d8f755ff540a9622c89e983..26a229f7aa3f4425ed572e2d50730b4e
      private final Component message;
      public net.kyori.adventure.text.Component adventure$message; // Paper
      public net.md_5.bungee.api.chat.BaseComponent[] components; // Spigot
-@@ -39,9 +39,9 @@ public class ClientboundChatPacket implements Packet<ClientGamePacketListener> {
+@@ -50,9 +50,9 @@ public class ClientboundChatPacket implements Packet<ClientGamePacketListener> {
              // buf.writeUtf(net.md_5.bungee.chat.ComponentSerializer.toString(components)); // Paper - comment, replaced with below
              // Paper start - don't nest if we don't need to so that we can preserve formatting
              if (this.components.length == 1) {

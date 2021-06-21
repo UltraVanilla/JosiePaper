@@ -185,10 +185,10 @@ index c839ea0b68fbdccfb7ed667c705a3f0f347fd89c..43cee8b0b2b94d6db6303a1631731ed5
      @Override
      public boolean isBlocking() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 60b8d4f974952c131c94c0dd23e44e28135beff9..1800119160d5711b694c14e9dde175b11c06ce61 100644
+index 9c06e0a28e1ad3d9f3dc819830d3e9899e27b7f6..a6da578ad6cf5a5522f806c29998d09b2e8e135c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -921,7 +921,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -927,7 +927,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          // Close any foreign inventory
          if (this.getHandle().containerMenu != this.getHandle().inventoryMenu) {

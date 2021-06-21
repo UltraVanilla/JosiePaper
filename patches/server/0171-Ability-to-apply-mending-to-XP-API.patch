@@ -28,7 +28,7 @@ index 27cdfbeb6cb2159075b35dd4f9e9557ec0eac7c2..e246bf034a86deba5a15e7c639f5e082
              return true;
          });
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6549ffa087f9955849024fa62cfca9e91cbecf30..f1c56823e1e89251c518d9d51ab7442b30a85336 100644
+index e09c2916c9ccc05e78c63fe355d54ccbc3d0ee39..20d158d672c4048f665f80e992675d34354aafe2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -61,11 +61,14 @@ import net.minecraft.server.level.ServerPlayer;
@@ -46,7 +46,7 @@ index 6549ffa087f9955849024fa62cfca9e91cbecf30..f1c56823e1e89251c518d9d51ab7442b
  import net.minecraft.world.level.GameType;
  import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.entity.SignBlockEntity;
-@@ -1202,8 +1205,37 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1208,8 +1211,37 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return GameMode.getByValue(this.getHandle().gameMode.getGameModeForPlayer().getId());
      }
  

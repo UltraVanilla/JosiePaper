@@ -6,10 +6,10 @@ Subject: [PATCH] Don't nest if we don't need to when cerealising text
 
 
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
-index 1f5050e6c1d932aa196ab9524f7f1f9bd1b45fce..a64780b4b49d01322d8f755ff540a9622c89e983 100644
+index ea78403f161e39a553341b0ff8bc23858979d374..ea1cef1a070bbc1aa7e355d89fe3f4091ee3d1ce 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundChatPacket.java
-@@ -36,7 +36,14 @@ public class ClientboundChatPacket implements Packet<ClientGamePacketListener> {
+@@ -47,7 +47,14 @@ public class ClientboundChatPacket implements Packet<ClientGamePacketListener> {
          // Paper end
          // Spigot start
          if (this.components != null) {

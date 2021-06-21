@@ -5,7 +5,7 @@ Subject: [PATCH] String based Action Bar API
 
 
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetActionBarTextPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetActionBarTextPacket.java
-index 32ef3edebe94a2014168b7e438752a80b2687e5f..ab6c58eed6707ab7b0aa3e7549a871ad7dfad87f 100644
+index d55afacbe7bff0fa1b8a5b69fce1f3febfedd14e..1cab7d526aee1d7577cd6d3f3ed1e9df3bbc5c57 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetActionBarTextPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetActionBarTextPacket.java
 @@ -7,6 +7,7 @@ import net.minecraft.network.protocol.Packet;
@@ -16,7 +16,7 @@ index 32ef3edebe94a2014168b7e438752a80b2687e5f..ab6c58eed6707ab7b0aa3e7549a871ad
  
      public ClientboundSetActionBarTextPacket(Component message) {
          this.text = message;
-@@ -21,6 +22,8 @@ public class ClientboundSetActionBarTextPacket implements Packet<ClientGamePacke
+@@ -30,6 +31,8 @@ public class ClientboundSetActionBarTextPacket implements Packet<ClientGamePacke
          // Paper start
          if (this.adventure$text != null) {
              buf.writeComponent(this.adventure$text);
@@ -26,10 +26,10 @@ index 32ef3edebe94a2014168b7e438752a80b2687e5f..ab6c58eed6707ab7b0aa3e7549a871ad
          // Paper end
          buf.writeComponent(this.text);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 3001399cbbe68621a5605436b74e4e96491b5dad..ea7a937dfd0769d734a056709d3af9d2f2ee5332 100644
+index dbad52567442b7b95d1c1d996f0d6e782e117332..ffb4290731f7b4bbe262b1be736317dd0314ddc9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -248,6 +248,26 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -254,6 +254,26 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      }
  
      // Paper start

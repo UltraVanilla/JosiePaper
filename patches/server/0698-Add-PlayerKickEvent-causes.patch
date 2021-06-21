@@ -57,7 +57,7 @@ index 708ac03d5a849bf09c49547306e4a8c5a5ef8d91..5a8df368a4a25839cd4ac9be6972da2e
          }
  
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index a6ea73a95963d1bb51e83c127acca8e1be326ab0..44a9021d6a1e7a9d4ed368aebaf917fa391ead0e 100644
+index da99d8c01db614941239a695cc0c22add9b0d938..0c295854f31422cf3ad699d229805c5881a65eed 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -321,7 +321,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
@@ -351,10 +351,10 @@ index aa8e3c9b5884b9de1cf6805b3033ca1c8cdb9cc6..a6ecbb7eb1df7923d58366327e0f0051
          // CraftBukkit end
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index f50772b5c07d5aa7dcd0ed015507c3f6440328c8..76e2ae09855e0efaaa0856d2f49e4968adbccbdc 100644
+index 5d119c6f3b1801a575e3c0d005d1a99b56370ae8..faca642d3497125f76164f4a6c07af817387136b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -498,16 +498,21 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -504,16 +504,21 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          org.spigotmc.AsyncCatcher.catchOp("player kick"); // Spigot
          if (this.getHandle().connection == null) return;
  

@@ -1174,10 +1174,10 @@ index f72471ac82907a0d5112598b3289689495285944..6e1f8323d028790d1f55d51edb3214d0
              net.minecraft.world.level.chunk.LevelChunk chunk = (net.minecraft.world.level.chunk.LevelChunk) either.left().orElse(null);
              if (chunk != null) addTicket(x, z); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index a98394d9bab490c1bdb5817cb30806cab85de730..535fb8f029dc09862e42e239a0fc7326e31508ef 100644
+index 69cae40b7c64dd6f007982cdd58e77b81a4a0433..8a881493c3ca6fbefec1e164f298439a8fb2a3a2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -889,6 +889,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -895,6 +895,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          throw new UnsupportedOperationException("Cannot set rotation of players. Consider teleporting instead.");
      }
  

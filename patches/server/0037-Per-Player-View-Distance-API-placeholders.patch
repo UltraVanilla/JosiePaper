@@ -7,7 +7,7 @@ I hope to look at this more in-depth soon. It appears doable.
 However this should not block the update.
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index f4b850fd8504cd3c84786f990dec43f17a2c422e..a44aa391e77d7be7eac00643558884d01c320aab 100644
+index 4f1fbaa67ce39be6722fcd472affb03606bd13a0..1c78d8eae9e2db348a77ff0c32ec99cd61eded83 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -170,6 +170,8 @@ import org.bukkit.inventory.MainHand;
@@ -20,10 +20,10 @@ index f4b850fd8504cd3c84786f990dec43f17a2c422e..a44aa391e77d7be7eac00643558884d0
      private static final int NEUTRAL_MOB_DEATH_NOTIFICATION_RADII_XZ = 32;
      private static final int NEUTRAL_MOB_DEATH_NOTIFICATION_RADII_Y = 10;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 13f2e3f6a7f4ffc3394264889b41d6791730d1e7..755dda2de8de4719251be884dcc1ae953df1856c 100644
+index da2c5296903f2f320c9d38e05535cde94577a5c7..12461eccdf0f342f26e711b7c0b8f1a8f9846d0e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -371,6 +371,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -379,6 +379,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
              connection.disconnect(message == null ? net.kyori.adventure.text.Component.empty() : message);
          }
      }
