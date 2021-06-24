@@ -1,16 +1,10 @@
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.0.0" apply false
-    id("io.papermc.paperweight.core") version "1.0.0-LOCAL-SNAPSHOT"
+    id("io.papermc.paperweight.core") version "1.1.7-LOCAL-SNAPSHOT"
 }
 
-group = "com.destroystokyo.paper"
-version = providers.gradleProperty("projectVersion").forUseAtConfigurationTime().get()
-
-val mcVersion = providers.gradleProperty("mcVersion")
-val packageVersion = providers.gradleProperty("packageVersion")
-
-allprojects {
+subprojects {
     apply(plugin = "java")
 
     java {
@@ -18,11 +12,9 @@ allprojects {
             languageVersion.set(JavaLanguageVersion.of(11))
         }
     }
-}
 
-subprojects {
-    tasks.withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
+    tasks.withType<JavaCompile> {
+        options.encoding = Charsets.UTF_8.name()
         options.release.set(8)
     }
 
@@ -42,9 +34,8 @@ subprojects {
 }
 
 repositories {
-    mavenLocal()
-
-    maven("https://wav.jfrog.io/artifactory/repo/") {
+    mavenCentral()
+    maven("https://papermc.io/repo/repository/maven-public/") {
         content {
             onlyForConfigurations("paperclip")
         }
@@ -63,21 +54,22 @@ repositories {
 
 dependencies {
     paramMappings("org.quiltmc:yarn:1.16.5+build.6:mergedv2")
-    remapper("org.quiltmc:tiny-remapper:0.3.2:fat@jar")
-    decompiler("net.minecraftforge:forgeflower:1.5.498.5@jar")
-    paperclip("io.papermc:paperclip:2.0.0-SNAPSHOT@jar")
+    remapper("org.quiltmc:tiny-remapper:0.4.1")
+    decompiler("net.minecraftforge:forgeflower:1.5.498.12")
+    paperclip("io.papermc:paperclip:2.0.1")
 }
 
 paperweight {
-    minecraftVersion.set(mcVersion)
-    versionPackage.set(packageVersion)
+    minecraftVersion.set(providers.gradleProperty("mcVersion"))
     serverProject.set(project(":Paper-Server"))
 
     paper {
-        mappingsPatch.set(file("build-data/mappings-patch.tiny"))
+        spigotApiPatchDir.set(layout.projectDirectory.dir("Spigot-API-Patches"))
+        spigotServerPatchDir.set(layout.projectDirectory.dir("Spigot-Server-Patches"))
 
-        additionalSpigotMemberMappings.set(file("build-data/additional-spigot-member-mappings.csrg"))
+        mappingsPatch.set(layout.projectDirectory.file("build-data/mappings-patch.tiny"))
 
-        craftBukkitPatchPatchesDir.set(file("build-data/craftbukkit-patch-patches"))
+        additionalSpigotMemberMappings.set(layout.projectDirectory.file("build-data/additional-spigot-member-mappings.csrg"))
+        craftBukkitPatchPatchesDir.set(layout.projectDirectory.dir("build-data/craftbukkit-patch-patches"))
     }
 }

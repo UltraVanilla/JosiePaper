@@ -5,11 +5,11 @@ Subject: [PATCH] Fix remap
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Phantom.java b/src/main/java/net/minecraft/world/entity/monster/Phantom.java
-index 4a2fecdfbda34d6360d50e2ac017907a62b4a043..06921838c363fbcde8be9a55741538d3b3c9f6b0 100644
+index d82c562550532ae0981da153bcacfa977aeb9ca2..4708eabc69351735444087c975d32f96e1c69804 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Phantom.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Phantom.java
 @@ -236,7 +236,7 @@ public class Phantom extends FlyingMob implements Enemy {
-                 List<Player> list = Phantom.this.level.getNearbyPlayers(this.attackTargeting, (LivingEntity) Phantom.this, Phantom.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
+                 List<Player> list = Phantom.this.level.getNearbyPlayers(this.b, (LivingEntity) Phantom.this, Phantom.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
  
                  if (!list.isEmpty()) {
 -                    list.sort(Comparator.comparing(Entity::getY).reversed());

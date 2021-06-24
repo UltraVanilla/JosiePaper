@@ -5,19 +5,19 @@ Subject: [PATCH] Switch to AtomicInteger for chatSpamTickCount
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 70b5ac18bcab5bbb46b1e206b512e5a1c8131748..861efdeb98bd7321afffe4780df7df1fadb2d9d9 100644
+index f93d5d13cf32550794db71b876210d969bd6ef2b..0a7bf606616271b550a5b42e993b39bfb604fedf 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -222,8 +222,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
      private boolean keepAlivePending;
-     private long keepAliveChallenge;
+     private long h;
      // CraftBukkit start - multithreaded fields
 -    private volatile int chatSpamTickCount;
 -    private static final AtomicIntegerFieldUpdater chatSpamField = AtomicIntegerFieldUpdater.newUpdater(ServerGamePacketListenerImpl.class, "chatThrottle");
 +    private final java.util.concurrent.atomic.AtomicInteger chatSpamTickCount = new java.util.concurrent.atomic.AtomicInteger(0); // Paper - switch to AtomicInteger
      // CraftBukkit end
-     private int dropSpamTickCount;
-     private final Int2ShortMap expectedAcks = new Int2ShortOpenHashMap();
+     private int j;
+     private final Int2ShortMap k = new Int2ShortOpenHashMap();
 @@ -351,7 +350,7 @@ public class ServerGamePacketListenerImpl implements ServerGamePacketListener {
  
          this.server.getProfiler().pop();
