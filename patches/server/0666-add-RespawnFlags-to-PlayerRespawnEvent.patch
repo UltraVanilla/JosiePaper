@@ -5,10 +5,10 @@ Subject: [PATCH] add RespawnFlags to PlayerRespawnEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 31ce3cdfa40b0abd2ba85a100cc7def5b0f9c65e..cfcffcb5c61a8a549c9a33367d2d5c4e0cd9e9ea 100644
+index 08c7eeb53266fe003be1c86bb3afe33c7335f0f8..18c36a21d3ef1f439fa7ef625609a5eb59e63ae9 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -2452,7 +2452,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -2461,7 +2461,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
              case PERFORM_RESPAWN:
                  if (this.player.wonGame) {
                      this.player.wonGame = false;
