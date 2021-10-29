@@ -71,7 +71,7 @@ index 0000000000000000000000000000000000000000..e8b4053babe46999980b926431254050
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index a999fece43b1b3f687061b541a975d889886db60..f512d68cbeb243fbef8fad73472ea6587112f889 100644
+index deda6741a81151fe4acb87925edad2201a92b79e..1141e264862fb36c1a085c236f14f7fe1cf49c85 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -743,6 +743,10 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -92,7 +92,7 @@ index a999fece43b1b3f687061b541a975d889886db60..f512d68cbeb243fbef8fad73472ea658
 -        BlockPos blockposition;
 +        final BlockPos.MutableBlockPos blockposition = this.chunkTickMutablePosition; // Paper - use mutable to reduce allocation rate, final to force compile fail on change
  
-         if (!this.paperConfig.disableThunder && flag && this.isThundering() && this.random.nextInt(100000) == 0) { // Paper - Disable thunder
+         if (!this.paperConfig.disableThunder && flag && this.isThundering() && this.spigotConfig.thunderChance > 0 && this.random.nextInt(this.spigotConfig.thunderChance) == 0) { // Spigot // Paper - disable thunder
 -            blockposition = this.findLightningTargetAround(this.getBlockRandomPos(j, 0, k, 15));
 +            blockposition.set(this.findLightningTargetAround(this.getBlockRandomPos(j, 0, k, 15))); // Paper
              if (this.isRainingAt(blockposition)) {
@@ -248,7 +248,7 @@ index 07e1374ac3430662edd9f585e59b785e329f0820..9f9c0b56f0891e9c423d79f8ae4c3643
 +    // Paper end
  }
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Turtle.java b/src/main/java/net/minecraft/world/entity/animal/Turtle.java
-index 925f16d5eb092518ef774f69a8d99689feb0f5d7..01d8af06f19427354cac95d691e65d31253fef94 100644
+index 00dbe5046c3b93e402218a6903ea2f087410388b..7d001f42c448fd328b6384d133dcc4b72aab756c 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Turtle.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Turtle.java
 @@ -91,7 +91,7 @@ public class Turtle extends Animal {
@@ -259,12 +259,12 @@ index 925f16d5eb092518ef774f69a8d99689feb0f5d7..01d8af06f19427354cac95d691e65d31
 +        this.entityData.set(Turtle.HOME_POS, pos.immutable()); // Paper - called with mutablepos...
      }
  
-     public BlockPos getHomePos() { // Paper - public
+     public BlockPos getHomePos() {
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 921aba3463b9f86a9e3c7d59aaa48b9760693eab..5efafcadda2bfc5cab8ce5d3ede83a0467fe696f 100644
+index a6891e051b3b2863fa8ca108af418892515d7295..64d5e71a8a26116385cee195d86fce1ef1574a8c 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -1363,10 +1363,18 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -1365,10 +1365,18 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
      public abstract TagContainer getTagManager();
  
      public BlockPos getBlockRandomPos(int x, int y, int z, int l) {

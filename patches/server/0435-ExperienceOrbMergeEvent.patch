@@ -9,10 +9,10 @@ Plugins can cancel this if they want to ensure experience orbs do not lose impor
 metadata such as spawn reason, or conditionally move data from source to target.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index bb80d9840fd9448bf18df00c205a93a623b45ba9..0cb910df23ed963b70b28be26a30460b7882c112 100644
+index b07247dda5f7be1186c47ce5cb490ca0a46cc56c..ff2149572a82d6605a0b28f2fdd0dadb86af25a1 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -639,7 +639,7 @@ public class CraftEventFactory {
+@@ -640,7 +640,7 @@ public class CraftEventFactory {
                      if (e instanceof net.minecraft.world.entity.ExperienceOrb) {
                          net.minecraft.world.entity.ExperienceOrb loopItem = (net.minecraft.world.entity.ExperienceOrb) e;
                          // Paper start
