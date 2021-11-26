@@ -5,10 +5,10 @@ Subject: [PATCH] Add phantom creative and insomniac controls
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 03c45d4fa891e9f00d4b6b24cfc144086294618b..e146dad0d90fee216630eb3df6a34e2a0f6441a6 100644
+index 6bda3fc058045d637564fde569b6c44aabdfd099..4e43d4fbd5f69d278f94b69c0704d2bc3569296e 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -518,6 +518,13 @@ public class PaperWorldConfig {
+@@ -557,6 +557,13 @@ public class PaperWorldConfig {
          lightQueueSize = getInt("light-queue-size", lightQueueSize);
      }
  

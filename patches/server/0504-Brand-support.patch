@@ -5,7 +5,7 @@ Subject: [PATCH] Brand support
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 51303e89ec160f3715e538903ae98be993d59150..a80781a0525ef5b46a7c9af3011dab6662f06016 100644
+index ce4f1ab41ec2e5f656114fbd7b6f825bccf15d17..76794189454f5dd935fcd77e3c89a1ce58a9b570 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
@@ -33,7 +33,7 @@ index 51303e89ec160f3715e538903ae98be993d59150..a80781a0525ef5b46a7c9af3011dab66
      public ServerGamePacketListenerImpl(MinecraftServer server, Connection connection, ServerPlayer player) {
          this.server = server;
          this.connection = connection;
-@@ -2991,6 +2995,8 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -2992,6 +2996,8 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
      private static final ResourceLocation CUSTOM_REGISTER = new ResourceLocation("register");
      private static final ResourceLocation CUSTOM_UNREGISTER = new ResourceLocation("unregister");
  
@@ -42,7 +42,7 @@ index 51303e89ec160f3715e538903ae98be993d59150..a80781a0525ef5b46a7c9af3011dab66
      @Override
      public void handleCustomPayload(ServerboundCustomPayloadPacket packet) {
          PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());
-@@ -3018,6 +3024,15 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -3019,6 +3025,15 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
              try {
                  byte[] data = new byte[packet.data.readableBytes()];
                  packet.data.readBytes(data);
@@ -58,7 +58,7 @@ index 51303e89ec160f3715e538903ae98be993d59150..a80781a0525ef5b46a7c9af3011dab66
                  this.cserver.getMessenger().dispatchIncomingMessage(this.player.getBukkitEntity(), packet.identifier.toString(), data);
              } catch (Exception ex) {
                  ServerGamePacketListenerImpl.LOGGER.error("Couldn\'t dispatch custom payload", ex);
-@@ -3027,6 +3042,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -3028,6 +3043,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
  
      }
  
@@ -72,10 +72,10 @@ index 51303e89ec160f3715e538903ae98be993d59150..a80781a0525ef5b46a7c9af3011dab66
          return (!this.player.joining && !this.connection.isConnected()) || this.processedDisconnect; // Paper
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 046a60f6fa85803418eea2690b997ccdcab100fc..c661f6f29633fd5b28bb6ce71ed49463a3d7ecf0 100644
+index 21a2f83aa91a41ea1f4e9e87e804d587838c0d45..c15d0bc8df85b81f8dec2d17b3b6eee9ef9ad1c8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2477,6 +2477,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2484,6 +2484,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          // Paper end
      };
  

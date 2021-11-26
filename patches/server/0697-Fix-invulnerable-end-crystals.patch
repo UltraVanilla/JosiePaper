@@ -6,10 +6,10 @@ Subject: [PATCH] Fix invulnerable end crystals
 MC-108513
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 42ad87b87305f394777cdd97f00f2e8d40a6b5e8..ba8ae4d1c86293ca5c95d830d145023b4fe21d71 100644
+index d8ed734450a14ffeed6d7a42eed238645b0cb380..b1a8c0e6c07bcc3625e834592923da462977af5e 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -828,5 +828,10 @@ public class PaperWorldConfig {
+@@ -868,5 +868,10 @@ public class PaperWorldConfig {
      private void fixItemsMergingThroughWalls() {
          fixItemsMergingThroughWalls = getBoolean("fix-items-merging-through-walls", fixItemsMergingThroughWalls);
      }

@@ -23,10 +23,10 @@ index ee53453440177537fc653ea156785d7591498614..cfe293881f68c8db337c3a48948362bb
          }));
  
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 4dde7eec6afad0b4340631482dc23a9796736d43..f3ba9d869179fb4dc86acf1f4d097fb0da701a09 100644
+index 367bea78d479b73b35a324c58f8f9b981d9c8ccf..604a0b423ce7863ad872e111257ac2fe8d635d5a 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -492,6 +492,11 @@ public class PaperWorldConfig {
+@@ -531,6 +531,11 @@ public class PaperWorldConfig {
          lightQueueSize = getInt("light-queue-size", lightQueueSize);
      }
  
@@ -39,10 +39,10 @@ index 4dde7eec6afad0b4340631482dc23a9796736d43..f3ba9d869179fb4dc86acf1f4d097fb0
      public EngineMode engineMode;
      public int maxBlockHeight;
 diff --git a/src/main/java/net/minecraft/server/MCUtil.java b/src/main/java/net/minecraft/server/MCUtil.java
-index 5c1421620e02b7d4ab4171ebff41076c7ee8cd55..4bc418f45c6f16a9a1c78b6688625268870a96ad 100644
+index 2fe519d4059fac06781c30e140895b604e13104f..1d469a9ea0049687d7686f88382ac14514ad3bee 100644
 --- a/src/main/java/net/minecraft/server/MCUtil.java
 +++ b/src/main/java/net/minecraft/server/MCUtil.java
-@@ -636,7 +636,8 @@ public final class MCUtil {
+@@ -641,7 +641,8 @@ public final class MCUtil {
              });
  
              worldData.addProperty("name", world.getWorld().getName());
@@ -53,7 +53,7 @@ index 5c1421620e02b7d4ab4171ebff41076c7ee8cd55..4bc418f45c6f16a9a1c78b6688625268
              worldData.addProperty("keep-spawn-loaded-range", world.paperConfig.keepLoadedRange);
              worldData.addProperty("visible-chunk-count", visibleChunks.size());
 diff --git a/src/main/java/net/minecraft/server/level/ChunkHolder.java b/src/main/java/net/minecraft/server/level/ChunkHolder.java
-index 1ea32090783ac5b885b95ae2009dd61de3063ae0..8d3cdd288eacc91f7c9a624f601284e5cd2a36cc 100644
+index 47b3f4d84a9c7c730d07442ec69c064243d71ee1..84f370e887a3e7ff49296bdf8d6d8de9cc194cfb 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkHolder.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkHolder.java
 @@ -75,6 +75,17 @@ public class ChunkHolder {
@@ -145,7 +145,7 @@ index 1ea32090783ac5b885b95ae2009dd61de3063ae0..8d3cdd288eacc91f7c9a624f601284e5
  
      public CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> getOrScheduleFuture(ChunkStatus targetStatus, ChunkMap chunkStorage) {
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 85a3ccce473604561b5550b2b2b1f4aa02a04415..72471db48a9c67ced8b1ef1ebb3381be4f773e06 100644
+index 5bbdf56179d2e5fd0b42c37c84c9d4bc5faaee24..f6ff29613d09b82185c2b2132d1ed34b0f71c222 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -169,21 +169,68 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -502,7 +502,7 @@ index 45c7ebe67019cdbe88b6617a95d5c40d3a68286c..38eebda226e007c8910e04f502ce218c
                  if (withinViewDistance) {
                      DistanceManager.this.ticketThrottlerInput.tell(ChunkTaskPriorityQueueSorter.message(() -> {
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 363d86e4a35b87c3fabf7a0e4b6d9e6c2caaf3de..188b549fc56e1394c7119da99e4732065b256388 100644
+index e8cfc0856c33dab2d94bfebd0cc70823a2a4b69c..97d6963b6c7f0fb71324ac760df940fbf03e321f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -242,6 +242,7 @@ public class ServerPlayer extends Player {
@@ -545,10 +545,10 @@ index a2eb7689eafe20db59357ab3fad0e59cdef3481a..c0e8e863708ac794b7271765cdae99dc
  
          while (iterator.hasNext()) {
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 92313e70c30ca5acc0e7b54d55a972f024bad162..7023d83b2c0d36c5a56af47b69ca43f44dd9e47f 100644
+index 35209090439d5ab3bf5c37de28a39e60d482b64c..f196a184c05d5f87faee78323343d1fe19287c07 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
-@@ -530,8 +530,13 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
+@@ -519,8 +519,13 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
                  this.setBlocksDirty(blockposition, iblockdata1, iblockdata2);
              }
  
@@ -685,7 +685,7 @@ index d580a66dd741b63dd8ed89d7b976b1612cfb4d90..01ac6e7e7b4b6c61d01684c77ecc2238
      private final org.bukkit.World.Spigot spigot = new org.bukkit.World.Spigot()
      {
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index 2574ccd92c43f56e8be71f1bf6857c761a72a510..951e8ba1e05436aa0afcd0a72358550422afa791 100644
+index e0302f82356e8cba848aa8cec1e821e02abbd6f6..85449fc6d19974622588e7f13e1dc78c8dffbeee 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
 @@ -188,7 +188,7 @@ public class ActivationRange

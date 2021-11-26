@@ -68,10 +68,10 @@ index 18ae2e2b339d357fbe0f6f2b18bc14c0dfe4c222..3b7ba9c755c82a6f086d5542d32b3567
      }
  
 diff --git a/src/main/java/net/minecraft/server/MCUtil.java b/src/main/java/net/minecraft/server/MCUtil.java
-index 4bc418f45c6f16a9a1c78b6688625268870a96ad..379ba589b0423284d63782d951c64770b160cf2d 100644
+index 1d469a9ea0049687d7686f88382ac14514ad3bee..14d31bc2fb19b1265ee3e72280f2aba22ec0a26d 100644
 --- a/src/main/java/net/minecraft/server/MCUtil.java
 +++ b/src/main/java/net/minecraft/server/MCUtil.java
-@@ -671,6 +671,7 @@ public final class MCUtil {
+@@ -676,6 +676,7 @@ public final class MCUtil {
                  chunkData.addProperty("x", playerChunk.pos.x);
                  chunkData.addProperty("z", playerChunk.pos.z);
                  chunkData.addProperty("ticket-level", playerChunk.getTicketLevel());
@@ -80,7 +80,7 @@ index 4bc418f45c6f16a9a1c78b6688625268870a96ad..379ba589b0423284d63782d951c64770
                  chunkData.addProperty("queued-for-unload", chunkMap.toDrop.contains(playerChunk.pos.longKey));
                  chunkData.addProperty("status", status == null ? "unloaded" : status.toString());
 diff --git a/src/main/java/net/minecraft/server/level/ChunkHolder.java b/src/main/java/net/minecraft/server/level/ChunkHolder.java
-index fe8e6d66665dc8c38e74c0b264cf507f99f83091..e317c73b430105052cbf28502916adc3bd60846b 100644
+index 6923c57173ddb220e1a8af16b116ea5678a773fb..88eb25d4ffc57cfe719a5a0591c9617f78c01ec9 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkHolder.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkHolder.java
 @@ -60,7 +60,7 @@ public class ChunkHolder {
@@ -361,7 +361,7 @@ index fe8e6d66665dc8c38e74c0b264cf507f99f83091..e317c73b430105052cbf28502916adc3
                  }
              }).exceptionally((throwable) -> {
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index c3b927e612806b3de4ec57bd6f926af35ad1146a..f43e8bb6b1c6c204b35ea64b47f6d6f558d0f7a5 100644
+index d77aabe4997b816b23a1f39ac353ae5bc7b8e1e4..f0154a13dbdad970042e248b3adc776573ab5d35 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
 @@ -122,6 +122,7 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
@@ -991,7 +991,7 @@ index d94241bcca4f2fd5e464a860bd356af504dc68b7..1cc4e0a1f3d8235ef88b48e01ca8b78a
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b426b4ca0 100644
+index 8cef8dca3971cbbb4eddf08ff47eca6874c1ac99..77a6a5883d7e9fba12d0a2c8f3e7f2565d4785b4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -610,6 +610,26 @@ public class ServerChunkCache extends ChunkSource {
@@ -1040,7 +1040,7 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
              ichunkaccess = (ChunkAccess) ((Either) completablefuture.join()).map((ichunkaccess1) -> {
                  return ichunkaccess1;
 @@ -731,10 +755,12 @@ public class ServerChunkCache extends ChunkSource {
-         if (flag && !currentlyUnloading) {
+         if (create && !currentlyUnloading) {
              // CraftBukkit end
              this.distanceManager.addTicket(TicketType.UNKNOWN, chunkcoordintpair, l, chunkcoordintpair);
 +            if (isUrgent) this.distanceManager.markUrgent(chunkcoordintpair); // Paper - Chunk priority
@@ -1052,14 +1052,13 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
                  this.runDistanceManagerUpdates();
                  playerchunk = this.getVisibleChunkIfPresent(k);
                  gameprofilerfiller.pop();
-@@ -743,8 +769,13 @@ public class ServerChunkCache extends ChunkSource {
-                 }
+@@ -744,7 +770,13 @@ public class ServerChunkCache extends ChunkSource {
              }
          }
--
--        return this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(chunkstatus, this.chunkMap);
+ 
+-        return this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(leastStatus, this.chunkMap);
 +        // Paper start - Chunk priority
-+        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(chunkstatus, this.chunkMap);
++        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(leastStatus, this.chunkMap);
 +        if (isUrgent) {
 +            future.thenAccept(either -> this.distanceManager.clearUrgent(chunkcoordintpair));
 +        }
@@ -1068,7 +1067,7 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
      }
  
      private boolean chunkAbsent(@Nullable ChunkHolder holder, int maxLevel) {
-@@ -796,6 +827,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -796,6 +828,7 @@ public class ServerChunkCache extends ChunkSource {
      }
  
      public boolean runDistanceManagerUpdates() {
@@ -1077,7 +1076,7 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
          boolean flag1 = this.chunkMap.promoteChunkMap();
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 0f4f07513f4fe43c059a50257fcad5c30d1cc81d..74b68679d311017246d49c37f3cd17f938f3b57f 100644
+index 921a0edd8e778d34f08429c22dd410708addf36e..2ee07e5bb5b4081870ae46ba322e0ec9a4dfe0ec 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -189,6 +189,14 @@ public class ServerPlayer extends Player {
@@ -1424,7 +1423,7 @@ index 8770fe0db46b01e8b608637df4f1a669a3f4cdde..3c1698ba0d3bc412ab957777d9b5211d
      private final String name;
      private final Comparator<T> comparator;
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index c0ae236619bbdf9293fbf1c4a1764a785d16a67b..36a69fb0a9cd81ceb0f9cbe6549fc89bd643c77c 100644
+index 001167097afed95f93f54ff0e61220148849dd85..ffdba71ca4a42fee989438799d485826c9bb647a 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1545,6 +1545,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
@@ -1467,7 +1466,7 @@ index a5fb401e04bf194224d05020fe397e231e2f715c..0e3726495ef10717627dcf4297c944da
              entityplayer1.setPos(entityplayer1.getX(), entityplayer1.getY() + 1.0D, entityplayer1.getZ());
          }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 3e1f34ed8c3b4bd4f6c3624332a5f2be62e196fe..8df955a0aa6cd0c7d10619fb63abd16af4754be8 100644
+index 2806d247e92600a592615241a6d07527f6b527e8..9aa75a9e997825c27d57eae992ca58ecbb807dfb 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -223,7 +223,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
@@ -1526,10 +1525,10 @@ index 20d956c9a4e3b598ffebbe481a190158566343d9..228406d41c2e4d1615329752bbc9e609
              net.minecraft.world.level.chunk.LevelChunk chunk = (net.minecraft.world.level.chunk.LevelChunk) either.left().orElse(null);
              if (chunk != null) addTicket(x, z); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 991e9afd16de706ddc62ab2c121a87bc775142db..046a60f6fa85803418eea2690b997ccdcab100fc 100644
+index d1bb816bd718e09614bad435c50e9c882194a85d..21a2f83aa91a41ea1f4e9e87e804d587838c0d45 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -896,6 +896,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -903,6 +903,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          throw new UnsupportedOperationException("Cannot set rotation of players. Consider teleporting instead.");
      }
  

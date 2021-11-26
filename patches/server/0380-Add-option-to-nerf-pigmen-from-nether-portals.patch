@@ -5,11 +5,11 @@ Subject: [PATCH] Add option to nerf pigmen from nether portals
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 9dfb35654df01cf8fea6cf1842786f8466419729..6316597c52cb23f3cea81c95c0f7a7a289028537 100644
+index c95659ffe4722b50ea341f60c99262b60b8d0b81..8e2a2a069cd66605344a4d129dbb673976bf2f1f 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -487,6 +487,11 @@ public class PaperWorldConfig {
-         log("Hopper Move Item Events: " + (disableHopperMoveEvents ? "disabled" : "enabled"));
+@@ -526,6 +526,11 @@ public class PaperWorldConfig {
+         log("Hopper Ignore Occluding Blocks: " + (hoppersIgnoreOccludingBlocks ? "enabled" : "disabled"));
      }
  
 +    public boolean nerfNetherPortalPigmen = false;
@@ -21,7 +21,7 @@ index 9dfb35654df01cf8fea6cf1842786f8466419729..6316597c52cb23f3cea81c95c0f7a7a2
      private void lightQueueSize() {
          lightQueueSize = getInt("light-queue-size", lightQueueSize);
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index eec286fd4607c1d9a68c9063535bb630f92b6f4a..f8c611a6a55dd56e5231834c9481c61727b628e9 100644
+index 06597d10c640daca400da9d5a4c186cc95bca1bf..c8e1f38de2189c16cedfbf848593e4ae06e911f3 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -330,6 +330,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
