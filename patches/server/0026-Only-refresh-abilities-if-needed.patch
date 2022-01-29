@@ -5,10 +5,10 @@ Subject: [PATCH] Only refresh abilities if needed
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index ef2001db09ca1ca3412aa01c09a8ee3bd70ed228..216c73d3b9f8c3e7f9c81a4349ac4989bb0209c3 100644
+index 13d9bcb9ccc34bf81ba834365e511eabd4153aee..a0e5298abb15c11dc21ea09638a34ef11f253349 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -1502,12 +1502,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1523,12 +1523,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public void setFlying(boolean value) {

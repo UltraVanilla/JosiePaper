@@ -23,10 +23,10 @@ index a1fe02097f369a350de79d7eb94f4a6eb3d3530e..d64e7bbfda0ad2fd086fd918bf5fa31e
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 00e9f75a065b598358bc049027ee8896e168091f..4cb1cd3bd5905735daab669206d51ebcdecaea10 100644
+index a9fb93173266572acf4447e980859e5a2b6e9886..e81d8300ee80bfc20660b2c99a17703ad8d37701 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -134,6 +134,7 @@ import org.bukkit.metadata.MetadataValue;
+@@ -135,6 +135,7 @@ import org.bukkit.metadata.MetadataValue;
  import org.bukkit.plugin.Plugin;
  import org.bukkit.plugin.messaging.StandardMessenger;
  import org.bukkit.scoreboard.Scoreboard;
@@ -34,7 +34,7 @@ index 00e9f75a065b598358bc049027ee8896e168091f..4cb1cd3bd5905735daab669206d51ebc
  
  import net.md_5.bungee.api.chat.BaseComponent; // Spigot
  
-@@ -150,6 +151,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -151,6 +152,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      private double health = 20;
      private boolean scaledHealth = false;
      private double healthScale = 20;
@@ -45,7 +45,7 @@ index 00e9f75a065b598358bc049027ee8896e168091f..4cb1cd3bd5905735daab669206d51ebc
  
      public CraftPlayer(CraftServer server, ServerPlayer entity) {
          super(server, entity);
-@@ -1973,6 +1978,45 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1994,6 +1999,45 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public boolean getAffectsSpawning() {
          return this.getHandle().affectsSpawning;
      }

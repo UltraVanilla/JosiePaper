@@ -108,10 +108,10 @@ index 367e074dd5f85f824b7c4f5506d0ccac60580c1b..83c5b111b98e52f52b7e4cf607aac07b
          } else {
              passenger.stopRiding();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index aa5fdc74a3b06b8d8b82b86fb4f1469ddd4c629e..ae454b12a0671f6698ff2b889988348e3a518b36 100644
+index 0f6ed83a866153864cb52e978645a7278473718d..62f19eafbb650dfbfac31c320e4883149d327e43 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -313,6 +313,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -319,6 +319,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
      public void inactiveTick() { }
      // Spigot end
      // Paper start
@@ -120,7 +120,7 @@ index aa5fdc74a3b06b8d8b82b86fb4f1469ddd4c629e..ae454b12a0671f6698ff2b889988348e
      protected int numCollisions = 0; // Paper
      public boolean spawnedViaMobSpawner; // Paper - Yes this name is similar to above, upstream took the better one
      @javax.annotation.Nullable
-@@ -784,6 +786,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -790,6 +792,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
          } else {
              this.wasOnFire = this.isOnFire();
              if (movementType == MoverType.PISTON) {
@@ -129,7 +129,7 @@ index aa5fdc74a3b06b8d8b82b86fb4f1469ddd4c629e..ae454b12a0671f6698ff2b889988348e
                  movement = this.limitPistonMovement(movement);
                  if (movement.equals(Vec3.ZERO)) {
                      return;
-@@ -796,6 +800,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -802,6 +806,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
                  this.stuckSpeedMultiplier = Vec3.ZERO;
                  this.setDeltaMovement(Vec3.ZERO);
              }
@@ -335,7 +335,7 @@ index 6b29f66aec8a82b367a979b5b04857416b697c14..78d252b829e5c1f19532656a72862085
                              }
                          }
 diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
-index 07e5ece37af6b02210920ce6cc31738274d447a9..84880151abd193be5f02b5e9abb3fa78f2aa2cac 100644
+index 7bae24598218dcf0012dd21e619e6f5f984bd6f0..88c3022abc5edde312573de4fe499f1f5ee9eeae 100644
 --- a/src/main/java/org/spigotmc/ActivationRange.java
 +++ b/src/main/java/org/spigotmc/ActivationRange.java
 @@ -1,39 +1,52 @@
@@ -681,8 +681,8 @@ index 07e5ece37af6b02210920ce6cc31738274d447a9..84880151abd193be5f02b5e9abb3fa78
 +
              }
              // Add a little performance juice to active entities. Skip 1/4 if not immune.
--        } else if ( !entity.defaultActivationState && entity.tickCount % 4 == 0 && !ActivationRange.checkEntityImmunities( entity ) )
-+        } else if ( entity.tickCount % 4 == 0 && ActivationRange.checkEntityImmunities( entity ) < 0 ) // Paper
+-        } else if ( !entity.defaultActivationState && entity.tickCount + entity.getId() + 1 % 4 == 0 && !ActivationRange.checkEntityImmunities( entity ) ) // Paper - Ensure checking item movement is offset from Spigot's entity activation range check
++        } else if ( entity.tickCount + entity.getId() + 1 % 4 == 0 && ActivationRange.checkEntityImmunities( entity ) < 0 ) // Paper
          {
              isActive = false;
          }

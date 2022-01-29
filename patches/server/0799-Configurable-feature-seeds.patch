@@ -19,7 +19,7 @@ index ee53453440177537fc653ea156785d7591498614..5e3b7fb2e0b7608610555cd23e7ad25a
              }
              final Object val = config.get(key);
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index ea67eb1099e6ec34426d80c95e9999f4aa8793b9..8150330bc55a010c7d0f96421586226631eb72f7 100644
+index e5eeab49d167a9a151301ca910e1421550e14245..0a70dfd7880f5fcf1292dd2fdae2964bc2f51d61 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -946,6 +946,55 @@ public class PaperWorldConfig {
@@ -79,7 +79,7 @@ index ea67eb1099e6ec34426d80c95e9999f4aa8793b9..8150330bc55a010c7d0f964215862266
          return getIntOrDefault(behaviorTickRates, typeName, entityType, def);
      }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
-index e2b7da265e9616ac47e6be72cc6e6d2c75cfec44..e4591c0b3c8547cc6f4e2a0891fc378ee4334d9e 100644
+index 3461e62af6de8e4c5c72ff27937948d314bebf6a..3f0d83a90e1319baa0622b708b3ba940d3cee64a 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ChunkGenerator.java
 @@ -277,7 +277,7 @@ public abstract class ChunkGenerator implements BiomeManager.NoiseBiomeSource {

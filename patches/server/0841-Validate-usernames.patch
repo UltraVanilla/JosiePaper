@@ -22,10 +22,18 @@ index d5aa95846e7f52108a03e3731023527281b21d73..1d3cc8836d2ccbec4a8660f86501be35
      public static int maxPlayerAutoSavePerTick = 10;
      private static void playerAutoSaveRate() {
 diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-index 33a29890435d6065a2cc4f8e8bf8209c01d5d114..462d8c36166c63a4dc8fa74ac7f82859e6f4b83a 100644
+index 33a29890435d6065a2cc4f8e8bf8209c01d5d114..bb70d2b4d284727aa5dc88dd99534d09c2e38657 100644
 --- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-@@ -230,10 +230,38 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+@@ -65,6 +65,7 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+     private ServerPlayer delayedAcceptPlayer;
+     public String hostname = ""; // CraftBukkit - add field
+     private int velocityLoginMessageId = -1; // Paper - Velocity support
++    public boolean iKnowThisMayNotBeTheBestIdeaButPleaseDisableUsernameValidation = false; // Paper - username validation overriding
+ 
+     public ServerLoginPacketListenerImpl(MinecraftServer server, Connection connection) {
+         this.state = ServerLoginPacketListenerImpl.State.HELLO;
+@@ -230,10 +231,38 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
          // Paper end
      }
  
@@ -55,7 +63,7 @@ index 33a29890435d6065a2cc4f8e8bf8209c01d5d114..462d8c36166c63a4dc8fa74ac7f82859
          this.gameProfile = packet.getGameProfile();
 +        // Paper start - validate usernames
 +        if (com.destroystokyo.paper.PaperConfig.isProxyOnlineMode() && com.destroystokyo.paper.PaperConfig.performUsernameValidation) {
-+            if (!validateUsername(this.gameProfile.getName())) {
++            if (!this.iKnowThisMayNotBeTheBestIdeaButPleaseDisableUsernameValidation && !validateUsername(this.gameProfile.getName())) {
 +                ServerLoginPacketListenerImpl.this.disconnect("Failed to verify username!");
 +                return;
 +            }
@@ -65,10 +73,10 @@ index 33a29890435d6065a2cc4f8e8bf8209c01d5d114..462d8c36166c63a4dc8fa74ac7f82859
              this.state = ServerLoginPacketListenerImpl.State.KEY;
              this.connection.send(new ClientboundHelloPacket("", this.server.getKeyPair().getPublic().getEncoded(), this.nonce));
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 042be2cf60a9d01698808d84f2e537a5eb952079..f55f8c0b2c748a5442199c0a7f772b02ed533753 100644
+index fe9810c3b908339ca050ed832c2e67d62cc97b0b..cd08f9b16c065be8f0eacaeba51d3e72d332daf9 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -703,7 +703,7 @@ public abstract class PlayerList {
+@@ -707,7 +707,7 @@ public abstract class PlayerList {
  
          for (int i = 0; i < this.players.size(); ++i) {
              entityplayer = (ServerPlayer) this.players.get(i);
