@@ -5,10 +5,10 @@ Subject: [PATCH] Implement regenerateChunk
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index c808cc8dc96e325c543391048414880ed18a3ed3..7d2873a924ee81411a2a00bace0f58403fec43ea 100644
+index 268d77210e47d5247ac9b82c344fac323b16a0c4..d63570d60481e864a15d5594ac54c372151093d4 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -505,8 +505,8 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -507,8 +507,8 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
       * @return Whether the chunk was actually regenerated
       *
       * @deprecated regenerating a single chunk is not likely to produce the same
