@@ -277,7 +277,7 @@ public org.bukkit.craftbukkit.profile.CraftPlayerProfile toString(Lcom/mojang/au
 public org.bukkit.craftbukkit.profile.CraftPlayerProfile equals(Lcom/mojang/authlib/properties/PropertyMap;Lcom/mojang/authlib/properties/PropertyMap;)Z
 public org.bukkit.craftbukkit.profile.CraftPlayerProfile hashCode(Lcom/mojang/authlib/properties/PropertyMap;)I
 
-# Generator Settings
+# Flat bedrock generator settings
 public net.minecraft.world.level.levelgen.SurfaceRules$Condition
 public net.minecraft.world.level.levelgen.SurfaceRules$Context
 public net.minecraft.world.level.levelgen.SurfaceRules$Context blockX
@@ -315,3 +315,9 @@ public-f net.minecraft.world.level.gameevent.vibrations.VibrationListener listen
 # Fix custom inventory holders
 public-f net.minecraft.world.inventory.AbstractContainerMenu dataSlots
 public-f net.minecraft.world.inventory.AbstractContainerMenu remoteDataSlots
+
+# Fix falling block spawn methods
+public net.minecraft.world.entity.item.FallingBlockEntity <init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/level/block/state/BlockState;)V
+
+# Fix cancelling ProjectileHitEvent for piercing arrows
+protected net.minecraft.world.entity.projectile.Projectile hitCancelled
