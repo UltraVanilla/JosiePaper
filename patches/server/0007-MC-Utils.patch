@@ -2890,23 +2890,25 @@ index 0000000000000000000000000000000000000000..a1bc1d1d0c86217ef18883d281195bc6
 +}
 diff --git a/src/main/java/io/papermc/paper/util/IntervalledCounter.java b/src/main/java/io/papermc/paper/util/IntervalledCounter.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac644e704c
+index 0000000000000000000000000000000000000000..cea9c098ade00ee87b8efc8164ab72f5279758f0
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/util/IntervalledCounter.java
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,115 @@
 +package io.papermc.paper.util;
 +
 +public final class IntervalledCounter {
 +
 +    protected long[] times;
++    protected long[] counts;
 +    protected final long interval;
 +    protected long minTime;
-+    protected int sum;
++    protected long sum;
 +    protected int head; // inclusive
 +    protected int tail; // exclusive
 +
 +    public IntervalledCounter(final long interval) {
 +        this.times = new long[8];
++        this.counts = new long[8];
 +        this.interval = interval;
 +    }
 +
@@ -2915,7 +2917,7 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +    }
 +
 +    public void updateCurrentTime(final long currentTime) {
-+        int sum = this.sum;
++        long sum = this.sum;
 +        int head = this.head;
 +        final int tail = this.tail;
 +        final long minTime = currentTime - this.interval;
@@ -2924,8 +2926,15 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +
 +        // guard against overflow by using subtraction
 +        while (head != tail && this.times[head] - minTime < 0) {
-+            head = (head + 1) % arrayLen;
-+            --sum;
++            sum -= this.counts[head];
++            // there are two ways we can do this:
++            // 1. free the count when adding
++            // 2. free it now
++            // option #2
++            this.counts[head] = 0;
++            if (++head >= arrayLen) {
++                head = 0;
++            }
 +        }
 +
 +        this.sum = sum;
@@ -2934,6 +2943,10 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +    }
 +
 +    public void addTime(final long currTime) {
++        this.addTime(currTime, 1L);
++    }
++
++    public void addTime(final long currTime, final long count) {
 +        // guard against overflow by using subtraction
 +        if (currTime - this.minTime < 0) {
 +            return;
@@ -2945,28 +2958,29 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +        }
 +
 +        this.times[this.tail] = currTime;
++        this.counts[this.tail] += count;
++        this.sum += count;
 +        this.tail = nextTail;
 +    }
 +
 +    public void updateAndAdd(final int count) {
 +        final long currTime = System.nanoTime();
 +        this.updateCurrentTime(currTime);
-+        for (int i = 0; i < count; ++i) {
-+            this.addTime(currTime);
-+        }
++        this.addTime(currTime, count);
 +    }
 +
 +    public void updateAndAdd(final int count, final long currTime) {
 +        this.updateCurrentTime(currTime);
-+        for (int i = 0; i < count; ++i) {
-+            this.addTime(currTime);
-+        }
++        this.addTime(currTime, count);
 +    }
 +
 +    private void resize() {
 +        final long[] oldElements = this.times;
++        final long[] oldCounts = this.counts;
 +        final long[] newElements = new long[this.times.length * 2];
++        final long[] newCounts = new long[this.times.length * 2];
 +        this.times = newElements;
++        this.counts = newCounts;
 +
 +        final int head = this.head;
 +        final int tail = this.tail;
@@ -2976,9 +2990,13 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +
 +        if (tail >= head) {
 +            System.arraycopy(oldElements, head, newElements, 0, size);
++            System.arraycopy(oldCounts, head, newCounts, 0, size);
 +        } else {
 +            System.arraycopy(oldElements, head, newElements, 0, oldElements.length - head);
 +            System.arraycopy(oldElements, 0, newElements, oldElements.length - head, tail);
++
++            System.arraycopy(oldCounts, head, newCounts, 0, oldCounts.length - head);
++            System.arraycopy(oldCounts, 0, newCounts, oldCounts.length - head, tail);
 +        }
 +    }
 +
@@ -2987,11 +3005,8 @@ index 0000000000000000000000000000000000000000..059e8c61108cb78a80895cae36f2f8ac
 +        return this.size() / (this.interval * 1.0e-9);
 +    }
 +
-+    public int size() {
-+        final int head = this.head;
-+        final int tail = this.tail;
-+
-+        return tail >= head ? (tail - head) : (tail + (this.times.length - head));
++    public long size() {
++        return this.sum;
 +    }
 +}
 diff --git a/src/main/java/io/papermc/paper/util/WorldUtil.java b/src/main/java/io/papermc/paper/util/WorldUtil.java
@@ -5052,7 +5067,7 @@ index 868f6799a0e406401eecf18bc939fbdf88f534a2..dd8d14a1b128f801a4e1c811de5990d2
              } catch (Throwable throwable) {
                  // Spigot Start
 diff --git a/src/main/java/net/minecraft/server/level/ChunkHolder.java b/src/main/java/net/minecraft/server/level/ChunkHolder.java
-index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81eff0e4358 100644
+index a6dc73ddb58465667b9e227bece32f2952aa2270..e9523a7a3e1c6ee944ba539b952c8f25350bf815 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkHolder.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkHolder.java
 @@ -52,9 +52,9 @@ public class ChunkHolder {
@@ -5077,26 +5092,20 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
      public ChunkHolder(ChunkPos pos, int level, LevelHeightAccessor world, LevelLightEngine lightingProvider, ChunkHolder.LevelChangeListener levelUpdateListener, ChunkHolder.PlayerProvider playersWatchingChunkProvider) {
          this.futures = new AtomicReferenceArray(ChunkHolder.CHUNK_STATUSES.size());
          this.fullChunkFuture = ChunkHolder.UNLOADED_LEVEL_CHUNK_FUTURE;
-@@ -93,8 +95,30 @@ public class ChunkHolder {
+@@ -93,8 +95,23 @@ public class ChunkHolder {
          this.queueLevel = this.oldTicketLevel;
          this.setTicketLevel(level);
          this.changedBlocksPerSection = new ShortSet[world.getSectionsCount()];
 +        this.chunkMap = (ChunkMap)playersWatchingChunkProvider; // Paper
-+    }
-+
-+    // Paper start
-+    public LevelChunk getFullChunkUnchecked() {
-+        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> statusFuture = this.getFutureIfPresentUnchecked(ChunkStatus.FULL);
-+        Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure> either = (Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>) statusFuture.getNow(null);
-+        return (either == null) ? null : (LevelChunk) either.left().orElse(null);
      }
  
-+    public ChunkAccess getAvailableChunkNow() {
++    // Paper start
++    public @Nullable ChunkAccess getAvailableChunkNow() {
 +        // TODO can we just getStatusFuture(EMPTY)?
 +        for (ChunkStatus curr = ChunkStatus.FULL, next = curr.getParent(); curr != next; curr = next, next = next.getParent()) {
 +            CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = this.getFutureIfPresentUnchecked(curr);
 +            Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure> either = future.getNow(null);
-+            if (either == null || !either.left().isPresent()) {
++            if (either == null || either.left().isEmpty()) {
 +                continue;
 +            }
 +            return either.left().get();
@@ -5104,11 +5113,10 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
 +        return null;
 +    }
 +    // Paper end
-+
-     public CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> getFutureIfPresentUnchecked(ChunkStatus leastStatus) {
-         CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> completablefuture = (CompletableFuture) this.futures.get(leastStatus.getIndex());
- 
-@@ -105,20 +129,20 @@ public class ChunkHolder {
+     // CraftBukkit start
+     public LevelChunk getFullChunkNow() {
+         // Note: We use the oldTicketLevel for isLoaded checks.
+@@ -119,20 +136,20 @@ public class ChunkHolder {
          return ChunkHolder.getStatus(this.ticketLevel).isOrAfter(leastStatus) ? this.getFutureIfPresentUnchecked(leastStatus) : ChunkHolder.UNLOADED_CHUNK_FUTURE;
      }
  
@@ -5133,7 +5141,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          CompletableFuture<Either<LevelChunk, ChunkHolder.ChunkLoadingFailure>> completablefuture = this.getTickingChunkFuture();
          Either<LevelChunk, ChunkHolder.ChunkLoadingFailure> either = (Either) completablefuture.getNow(null); // CraftBukkit - decompile error
  
-@@ -126,7 +150,7 @@ public class ChunkHolder {
+@@ -140,7 +157,7 @@ public class ChunkHolder {
      }
  
      @Nullable
@@ -5142,7 +5150,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          CompletableFuture<Either<LevelChunk, ChunkHolder.ChunkLoadingFailure>> completablefuture = this.getFullChunkFuture();
          Either<LevelChunk, ChunkHolder.ChunkLoadingFailure> either = (Either) completablefuture.getNow(null); // CraftBukkit - decompile error
  
-@@ -147,6 +171,21 @@ public class ChunkHolder {
+@@ -161,6 +178,21 @@ public class ChunkHolder {
          return null;
      }
  
@@ -5164,7 +5172,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
      @Nullable
      public ChunkAccess getLastAvailable() {
          for (int i = ChunkHolder.CHUNK_STATUSES.size() - 1; i >= 0; --i) {
-@@ -165,7 +204,7 @@ public class ChunkHolder {
+@@ -179,7 +211,7 @@ public class ChunkHolder {
          return null;
      }
  
@@ -5173,7 +5181,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          return this.chunkToSave;
      }
  
-@@ -342,11 +381,11 @@ public class ChunkHolder {
+@@ -356,11 +388,11 @@ public class ChunkHolder {
          return ChunkHolder.getFullChunkStatus(this.ticketLevel);
      }
  
@@ -5187,7 +5195,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          return this.ticketLevel;
      }
  
-@@ -435,14 +474,27 @@ public class ChunkHolder {
+@@ -449,14 +481,27 @@ public class ChunkHolder {
  
          this.wasAccessibleSinceLastSave |= flag3;
          if (!flag2 && flag3) {
@@ -5215,7 +5223,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          }
  
          boolean flag4 = playerchunk_state.isOrAfter(ChunkHolder.FullChunkStatus.TICKING);
-@@ -451,12 +503,29 @@ public class ChunkHolder {
+@@ -465,12 +510,29 @@ public class ChunkHolder {
          if (!flag4 && flag5) {
              this.tickingChunkFuture = chunkStorage.prepareTickingChunk(this);
              this.scheduleFullChunkPromotion(chunkStorage, this.tickingChunkFuture, executor, ChunkHolder.FullChunkStatus.TICKING);
@@ -5238,7 +5246,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
 +            this.tickingChunkFuture.complete(ChunkHolder.UNLOADED_LEVEL_CHUNK); this.isTickingReady = false; // Paper - cache chunk ticking stage
              this.tickingChunkFuture = ChunkHolder.UNLOADED_LEVEL_CHUNK_FUTURE;
 +            // Paper start - ticking chunk set
-+            LevelChunk chunkIfCached = this.getFullChunkUnchecked();
++            LevelChunk chunkIfCached = this.getFullChunkNowUnchecked();
 +            if (chunkIfCached != null) {
 +                this.chunkMap.level.getChunkSource().tickingChunks.remove(chunkIfCached);
 +            }
@@ -5246,7 +5254,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          }
  
          boolean flag6 = playerchunk_state.isOrAfter(ChunkHolder.FullChunkStatus.ENTITY_TICKING);
-@@ -469,12 +538,28 @@ public class ChunkHolder {
+@@ -483,12 +545,28 @@ public class ChunkHolder {
  
              this.entityTickingChunkFuture = chunkStorage.prepareEntityTickingChunk(this.pos);
              this.scheduleFullChunkPromotion(chunkStorage, this.entityTickingChunkFuture, executor, ChunkHolder.FullChunkStatus.ENTITY_TICKING);
@@ -5268,7 +5276,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
 +            this.entityTickingChunkFuture.complete(ChunkHolder.UNLOADED_LEVEL_CHUNK); this.isEntityTickingReady = false; // Paper - cache chunk ticking stage
              this.entityTickingChunkFuture = ChunkHolder.UNLOADED_LEVEL_CHUNK_FUTURE;
 +            // Paper start - entity ticking chunk set
-+            LevelChunk chunkIfCached = this.getFullChunkUnchecked();
++            LevelChunk chunkIfCached = this.getFullChunkNowUnchecked();
 +            if (chunkIfCached != null) {
 +                this.chunkMap.level.getChunkSource().entityTickingChunks.remove(chunkIfCached);
 +            }
@@ -5276,7 +5284,7 @@ index d1a053dbade32fde28784c79659d9b150c90ed93..2b936c67265f3c672d3b623e6aedd81e
          }
  
          if (!playerchunk_state1.isOrAfter(playerchunk_state)) {
-@@ -590,4 +675,18 @@ public class ChunkHolder {
+@@ -604,4 +682,18 @@ public class ChunkHolder {
              }
          };
      }
@@ -5496,7 +5504,7 @@ index 6c98676827ceb6999f340fa2b06a0b3e1cb4cae2..f08089b8672454acf8c2309e850466b3
  
          while (objectiterator.hasNext()) {
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 2015e527044db26bed960b2915b5422a7d7ad0e3..94d717f43336ace9375409b48d1e0e4291072656 100644
+index 7c034b62dbebbbc4c9c4ceb427b1509fe8f986e3..e4d0035bbf17008642cdcc0e1dca5bae832bbbaa 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -49,6 +49,7 @@ import net.minecraft.world.level.storage.LevelStorageSource;
@@ -5842,7 +5850,7 @@ index 2015e527044db26bed960b2915b5422a7d7ad0e3..94d717f43336ace9375409b48d1e0e42
  
      public ServerChunkCache(ServerLevel world, LevelStorageSource.LevelStorageAccess session, DataFixer dataFixer, StructureManager structureManager, Executor workerExecutor, ChunkGenerator chunkGenerator, int viewDistance, int simulationDistance, boolean dsync, ChunkProgressListener worldGenerationProgressListener, ChunkStatusUpdateListener chunkStatusChangeListener, Supplier<DimensionDataStorage> persistentStateManagerFactory) {
          this.level = world;
-@@ -127,6 +456,49 @@ public class ServerChunkCache extends ChunkSource {
+@@ -119,6 +448,49 @@ public class ServerChunkCache extends ChunkSource {
          this.lastChunk[0] = chunk;
      }
  
@@ -5859,7 +5867,7 @@ index 2015e527044db26bed960b2915b5422a7d7ad0e3..94d717f43336ace9375409b48d1e0e42
 +            return null;
 +        }
 +
-+        return playerChunk.getFullChunkUnchecked();
++        return playerChunk.getFullChunkNowUnchecked();
 +    }
 +
 +    @Nullable
