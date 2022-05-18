@@ -7,7 +7,7 @@ Co-authored-by: zml <zml@stellardrift.ca>
 Co-authored-by: Jake Potrebic <jake.m.potrebic@gmail.com>
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperConfig.java b/src/main/java/com/destroystokyo/paper/PaperConfig.java
-index 23410c6ee34fcd9c50c2dbf35d8ff4d0c9ca408c..557ab97176944209c55f02dd106131ece2c01119 100644
+index 80a3d5890aab91e6a48d5734140187851106bde3..c1eb4201ecb0541c606ef0d05b828ae9c87c8a2c 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperConfig.java
 @@ -185,4 +185,13 @@ public class PaperConfig {
@@ -1163,7 +1163,7 @@ index 762a9392ffac3042356709dddd15bb3516048bed..3544e2dc2522e9d6305d727d56e73490
          buf.writeComponent(this.footer);
      }
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 3700c14c8fe5a52ad6eb6d1ca58232beea16c2d7..a29450df13bc32d5bc700a944541793a696a94d2 100644
+index 3431a70a07c08fdc20c7a8d667e6275f212b549e..d4d444b5864073fe86bfc7b5a68344b5aae8c05f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -145,6 +145,7 @@ import net.minecraft.world.scores.Score;
@@ -1777,10 +1777,10 @@ index d29c6d0536619fab5a48fbb52115dac09e7d7ca3..75871f74a25ee34db89a431de584b998
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 0bc0bd2e6861772f32e24694ad733fa4813f3033..305d5cb3581764b4d89c1f2220acb5786eb8faef 100644
+index b8b47416b66ec2272ce9ffdc06b0a1dd91b4c05a..5476dc1e80093d7684bc238bae102cbb691cec4f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -142,6 +142,7 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -143,6 +143,7 @@ public class CraftWorld extends CraftRegionAccessor implements World {
      private final BlockMetadataStore blockMetadata = new BlockMetadataStore(this);
      private final Object2IntOpenHashMap<SpawnCategory> spawnCategoryLimit = new Object2IntOpenHashMap<>();
      private final CraftPersistentDataContainer persistentDataContainer = new CraftPersistentDataContainer(CraftWorld.DATA_TYPE_REGISTRY);
@@ -1788,7 +1788,7 @@ index 0bc0bd2e6861772f32e24694ad733fa4813f3033..305d5cb3581764b4d89c1f2220acb578
  
      private static final Random rand = new Random();
  
-@@ -1862,4 +1863,18 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -1863,4 +1864,18 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return this.spigot;
      }
      // Spigot end
@@ -2285,7 +2285,7 @@ index 446fdca49a5a6999626a7ee3a1d5c168b15a09dd..f9863e138994f6c7a7975a852f106faa
      public boolean isOp() {
          return true;
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c9e069fac 100644
+index 2577a135bb88adc9000ab67477846c6466d973e7..7ff1fcfdc87bcd299da46fe8a7e090c118a42cfa 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -272,14 +272,39 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
@@ -2398,7 +2398,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      @Override
      public void setCompassTarget(Location loc) {
          if (this.getHandle().connection == null) return;
-@@ -620,6 +656,33 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -620,6 +656,35 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          this.getHandle().connection.send(packet);
      }
  
@@ -2424,7 +2424,9 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
 +        SignBlockEntity sign = new SignBlockEntity(new BlockPos(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), Blocks.OAK_SIGN.defaultBlockState());
 +        sign.setColor(net.minecraft.world.item.DyeColor.byId(dyeColor.getWoolData()));
 +        sign.setHasGlowingText(hasGlowingText);
-+        System.arraycopy(components, 0, sign.messages, 0, sign.messages.length);
++        for (int i = 0; i < components.length; i++) {
++            sign.setMessage(i, components[i]);
++        }
 +
 +        getHandle().connection.send(sign.getUpdatePacket());
 +    }
@@ -2432,7 +2434,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      @Override
      public void sendSignChange(Location loc, String[] lines) {
          this.sendSignChange(loc, lines, DyeColor.BLACK);
-@@ -647,14 +710,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -647,14 +712,15 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
  
          Component[] components = CraftSign.sanitizeLines(lines);
@@ -2450,7 +2452,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      }
  
      @Override
-@@ -1425,7 +1489,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1425,7 +1491,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public void setResourcePack(String url) {
@@ -2459,7 +2461,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      }
  
      @Override
-@@ -1440,7 +1504,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1440,7 +1506,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
      @Override
      public void setResourcePack(String url, byte[] hash, boolean force) {
@@ -2468,7 +2470,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      }
  
      @Override
-@@ -1456,6 +1520,21 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1456,6 +1522,21 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          }
      }
  
@@ -2490,7 +2492,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      public void addChannel(String channel) {
          Preconditions.checkState(this.channels.size() < 128, "Cannot register channel '%s'. Too many channels registered!", channel);
          channel = StandardMessenger.validateAndCorrectChannel(channel);
-@@ -1860,6 +1939,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1860,6 +1941,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return (this.getHandle().clientViewDistance == null) ? Bukkit.getViewDistance() : this.getHandle().clientViewDistance;
      }
  
@@ -2503,7 +2505,7 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      @Override
      public int getPing() {
          return this.getHandle().latency;
-@@ -1905,6 +1990,194 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -1905,6 +1992,194 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
          return this.getHandle().allowsListing();
      }
  
@@ -2699,10 +2701,10 @@ index 2577a135bb88adc9000ab67477846c6466d973e7..09f43730e40b4ab9f0a6c8d175cbcf7c
      private final Player.Spigot spigot = new Player.Spigot()
      {
 diff --git a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-index 4b0a056a134dd5868438bdd0d46f3dab8751436d..2a3853201a6ccf14b2aab67982de7789e0cbc552 100644
+index e9349ebcaa86144eefdb053b9eacf7ff37f2c0ec..147368eb3003b6a081389ab81bd5016db15ddba6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/event/CraftEventFactory.java
-@@ -817,9 +817,9 @@ public class CraftEventFactory {
+@@ -815,9 +815,9 @@ public class CraftEventFactory {
          return event;
      }
  
@@ -2714,7 +2716,7 @@ index 4b0a056a134dd5868438bdd0d46f3dab8751436d..2a3853201a6ccf14b2aab67982de7789
          event.setKeepInventory(keepInventory);
          event.setKeepLevel(victim.keepLevel); // SPIGOT-2222: pre-set keepLevel
          org.bukkit.World world = entity.getWorld();
-@@ -844,7 +844,7 @@ public class CraftEventFactory {
+@@ -842,7 +842,7 @@ public class CraftEventFactory {
       * Server methods
       */
      public static ServerListPingEvent callServerListPingEvent(Server craftServer, InetAddress address, String motd, int numPlayers, int maxPlayers) {
