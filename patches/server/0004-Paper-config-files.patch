@@ -5,7 +5,7 @@ Subject: [PATCH] Paper config files
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 35839e1c2dede1e3a1e54b124667cf2bf63e73f0..a87cf2a4ad955b7429269f2d46adbe59f6e4525e 100644
+index e4e9df9283c1a0fd7fff38a5d9b6a51f15e06b7a..07b7d43796985cff828ff472ddef2a11b543a4af 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -12,6 +12,7 @@ dependencies {
@@ -416,10 +416,10 @@ index 0000000000000000000000000000000000000000..13d7d1c24ec9192d0163f6eedeac8fca
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5a808a09291da691cbee75a55f6aa1b70ac9f018
+index 0000000000000000000000000000000000000000..456595e4b7e0c7f50617aa2694b0d2dfc368ab81
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/GlobalConfiguration.java
-@@ -0,0 +1,264 @@
+@@ -0,0 +1,265 @@
 +package io.papermc.paper.configuration;
 +
 +import co.aikar.timings.MinecraftTimings;
@@ -631,7 +631,7 @@ index 0000000000000000000000000000000000000000..5a808a09291da691cbee75a55f6aa1b7
 +        public Map<Class<? extends Packet<?>>, PacketLimit> overrides = Map.of(ServerboundPlaceRecipePacket.class, new PacketLimit(4.0, 5.0, PacketLimit.ViolateAction.DROP));
 +
 +        @ConfigSerializable
-+        public record PacketLimit(@Constraint(Constraints.Positive.class) @Required double interval, @Constraint(Constraints.Positive.class) @Required double maxPacketRate, ViolateAction action) {
++        public record PacketLimit(@Required double interval, @Required double maxPacketRate, ViolateAction action) {
 +            public PacketLimit(final double interval, final double maxPacketRate, final @Nullable ViolateAction action) {
 +                this.interval = interval;
 +                this.maxPacketRate = maxPacketRate;
@@ -682,6 +682,7 @@ index 0000000000000000000000000000000000000000..5a808a09291da691cbee75a55f6aa1b7
 +        public boolean useAlternativeLuckFormula = false;
 +        public boolean lagCompensateBlockBreaking = true;
 +        public boolean useDimensionTypeForCustomSpawners = false;
++        public boolean strictAdvancementDimensionCheck = false;
 +    }
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/InnerClassFieldDiscoverer.java b/src/main/java/io/papermc/paper/configuration/InnerClassFieldDiscoverer.java
@@ -1308,10 +1309,10 @@ index 0000000000000000000000000000000000000000..518a00886f7bde1de95150366541fc99
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/RemovedConfigurations.java b/src/main/java/io/papermc/paper/configuration/RemovedConfigurations.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d69d203eea014fc9fb40a556f0771dba15fcd2ea
+index 0000000000000000000000000000000000000000..1bb16fc7598cd53e822d84b69d6a9727b37f484f
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/RemovedConfigurations.java
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,63 @@
 +package io.papermc.paper.configuration;
 +
 +import org.spongepowered.configurate.NodePath;
@@ -1354,6 +1355,8 @@ index 0000000000000000000000000000000000000000..d69d203eea014fc9fb40a556f0771dba
 +        path("use-hopper-check"),
 +        path("use-async-lighting"),
 +        path("tnt-explosion-volume"),
++        path("entities", "spawning", "despawn-ranges", "soft"),
++        path("entities", "spawning", "despawn-ranges", "hard")
 +    };
 +
 +    NodePath[] REMOVED_GLOBAL_PATHS = {
@@ -2405,7 +2408,7 @@ index 0000000000000000000000000000000000000000..add9d16bac9e4570fbdcf8368d7ba031
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/serializer/TableSerializer.java b/src/main/java/io/papermc/paper/configuration/serializer/TableSerializer.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..0b235ebe6e79d7aa420d6b8a52aedb3a4d8b6629
+index 0000000000000000000000000000000000000000..346422c5eb791961061cc73b9b827d63bbd67daf
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/serializer/TableSerializer.java
 @@ -0,0 +1,89 @@
@@ -2461,9 +2464,9 @@ index 0000000000000000000000000000000000000000..0b235ebe6e79d7aa420d6b8a52aedb3a
 +        final BasicConfigurationNode rowKeyNode = BasicConfigurationNode.root(node.options());
 +
 +        for (final Object key : node.childrenMap().keySet()) {
-+            rowKeySerializer.deserialize(rowType, rowKeyNode.set(key));
++            final R rowKey = rowKeySerializer.deserialize(rowType, rowKeyNode.set(key));
 +            final Map<C, V> map = columnValueSerializer.deserialize(mapType, node.node(rowKeyNode.raw()));
-+            map.forEach((column, value) -> table.put((R) rowKeyNode.raw(), column, value));
++            map.forEach((column, value) -> table.put(rowKey, column, value));
 +        }
 +    }
 +
@@ -3548,10 +3551,10 @@ index 0000000000000000000000000000000000000000..3e422b74a377fa3edaf82dd960e7449c
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/type/DoubleOrDefault.java b/src/main/java/io/papermc/paper/configuration/type/DoubleOrDefault.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..37aa2873eb7fbfb9cfbf890e5ca2a3965f8d612f
+index 0000000000000000000000000000000000000000..193709f1d08e489fc51cbe11d432529768ac1449
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/type/DoubleOrDefault.java
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,65 @@
 +package io.papermc.paper.configuration.type;
 +
 +import org.apache.commons.lang3.math.NumberUtils;
@@ -3562,6 +3565,7 @@ index 0000000000000000000000000000000000000000..37aa2873eb7fbfb9cfbf890e5ca2a396
 +import java.util.OptionalDouble;
 +import java.util.function.Predicate;
 +
++@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 +public final class DoubleOrDefault {
 +    private static final String DEFAULT_VALUE = "default";
 +    public static final DoubleOrDefault USE_DEFAULT = new DoubleOrDefault(OptionalDouble.empty());
@@ -3599,10 +3603,10 @@ index 0000000000000000000000000000000000000000..37aa2873eb7fbfb9cfbf890e5ca2a396
 +                if (NumberUtils.isParsable(string)) {
 +                    return new DoubleOrDefault(OptionalDouble.of(Double.parseDouble(string)));
 +                }
-+            } else if (obj instanceof Double num) {
-+                return new DoubleOrDefault(OptionalDouble.of(num));
++            } else if (obj instanceof Number num) {
++                return new DoubleOrDefault(OptionalDouble.of(num.doubleValue()));
 +            }
-+            throw new SerializationException(obj + " is of an unexpected type " + type);
++            throw new SerializationException(obj + "(" + type + ") is not a double or '" + DEFAULT_VALUE + "'");
 +        }
 +
 +        @Override
@@ -3721,21 +3725,25 @@ index 0000000000000000000000000000000000000000..fdc906b106a5c6fff2675d5399650f5b
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/type/IntOrDefault.java b/src/main/java/io/papermc/paper/configuration/type/IntOrDefault.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..18a77c5694dc9739c7e2b52deb7dbfebb01b6c38
+index 0000000000000000000000000000000000000000..3278045dbf081cc4099e2eac3a6c4fac3012be4b
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/type/IntOrDefault.java
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,56 @@
 +package io.papermc.paper.configuration.type;
++
++import com.mojang.logging.LogUtils;
++import org.apache.commons.lang3.math.NumberUtils;
++import org.slf4j.Logger;
++import org.spongepowered.configurate.serialize.ScalarSerializer;
++import org.spongepowered.configurate.serialize.SerializationException;
 +
 +import java.lang.reflect.Type;
 +import java.util.OptionalInt;
 +import java.util.function.Predicate;
-+import org.apache.commons.lang3.math.NumberUtils;
-+import org.spongepowered.configurate.serialize.ScalarSerializer;
-+import org.spongepowered.configurate.serialize.SerializationException;
 +
 +public record IntOrDefault(OptionalInt value) {
 +    private static final String DEFAULT_VALUE = "default";
++    private static final Logger LOGGER = LogUtils.getLogger();
 +    public static final IntOrDefault USE_DEFAULT = new IntOrDefault(OptionalInt.empty());
 +    public static final ScalarSerializer<IntOrDefault> SERIALIZER = new Serializer();
 +
@@ -3757,8 +3765,11 @@ index 0000000000000000000000000000000000000000..18a77c5694dc9739c7e2b52deb7dbfeb
 +                if (NumberUtils.isParsable(string)) {
 +                    return new IntOrDefault(OptionalInt.of(Integer.parseInt(string)));
 +                }
-+            } else if (obj instanceof Integer num) {
-+                return new IntOrDefault(OptionalInt.of(num));
++            } else if (obj instanceof Number num) {
++                if (num.intValue() != num.doubleValue() || num.intValue() != num.longValue()) {
++                    LOGGER.error("{} cannot be converted to an integer without losing information", num);
++                }
++                return new IntOrDefault(OptionalInt.of(num.intValue()));
 +            }
 +            throw new SerializationException(obj + "(" + type + ") is not a integer or '" + DEFAULT_VALUE + "'");
 +        }
@@ -3865,10 +3876,10 @@ index 0000000000000000000000000000000000000000..0f2765b2edc63c11ba3c57ff55c53605
 +}
 diff --git a/src/main/java/io/papermc/paper/configuration/type/fallback/FallbackValue.java b/src/main/java/io/papermc/paper/configuration/type/fallback/FallbackValue.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d279ef02a44e2a8fc971cbf8ec816444271ccfc9
+index 0000000000000000000000000000000000000000..a3a1d398d783c37914fb6d646e11361afee687b8
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/configuration/type/fallback/FallbackValue.java
-@@ -0,0 +1,101 @@
+@@ -0,0 +1,102 @@
 +package io.papermc.paper.configuration.type.fallback;
 +
 +import com.google.common.base.Preconditions;
@@ -3883,6 +3894,7 @@ index 0000000000000000000000000000000000000000..d279ef02a44e2a8fc971cbf8ec816444
 +import java.util.Set;
 +import java.util.function.Supplier;
 +
++@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 +public sealed abstract class FallbackValue permits FallbackValue.Int {
 +
 +    private static final String DEFAULT_VALUE = "default";
@@ -4236,7 +4248,7 @@ index a96cb7a5f7c94cd9a46b31cf8ec90b544221557b..7c35d86eac0d69ba4be48faf364fd6dc
          for ( Method method : clazz.getDeclaredMethods() )
          {
 diff --git a/src/main/java/org/spigotmc/SpigotWorldConfig.java b/src/main/java/org/spigotmc/SpigotWorldConfig.java
-index a04da0a7d690fe3fcf10810b4e8c92a8ae027b86..feef74e3a6d50344245c4a61ece5b2194af1072f 100644
+index bd0bf398f900302187f3436119c754592d575416..d139cbcf0b159372f229bef6ae49b45a74c163ad 100644
 --- a/src/main/java/org/spigotmc/SpigotWorldConfig.java
 +++ b/src/main/java/org/spigotmc/SpigotWorldConfig.java
 @@ -58,8 +58,14 @@ public class SpigotWorldConfig
