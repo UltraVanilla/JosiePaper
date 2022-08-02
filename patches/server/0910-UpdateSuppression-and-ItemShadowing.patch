@@ -1,0 +1,100 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: LIMPIX31 <limpix31@gmail.com>
+Date: Tue, 21 Jun 2022 15:20:40 +0200
+Subject: [PATCH] UpdateSuppression-And-ItemShadowing
+
+
+diff --git a/src/main/java/me/LIMPIX31/paperutils/SuppressedThrowable.java b/src/main/java/me/LIMPIX31/paperutils/SuppressedThrowable.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..c1681378887806755fea3c141726201cae247b9f
+--- /dev/null
++++ b/src/main/java/me/LIMPIX31/paperutils/SuppressedThrowable.java
+@@ -0,0 +1,7 @@
++package me.LIMPIX31.paperutils;
++
++public class SuppressedThrowable extends RuntimeException {
++  public SuppressedThrowable(String reason) {
++    super(reason);
++  }
++}
+diff --git a/src/main/java/net/minecraft/network/protocol/PacketUtils.java b/src/main/java/net/minecraft/network/protocol/PacketUtils.java
+index 1429f938c36d5a3a33e71837f440b2303d60cfe7..2f3524277ecc0e11424c15ab83ab49b9b52e4e75 100644
+--- a/src/main/java/net/minecraft/network/protocol/PacketUtils.java
++++ b/src/main/java/net/minecraft/network/protocol/PacketUtils.java
+@@ -50,6 +50,9 @@ public class PacketUtils {
+                     try (co.aikar.timings.Timing ignored = timing.startTiming()) { // Paper - timings
+                         packet.handle(listener);
+                     } catch (Exception exception) {
++                        if(exception instanceof me.LIMPIX31.paperutils.SuppressedThrowable  || (exception instanceof net.minecraft.ReportedException re && exception.getCause() instanceof me.LIMPIX31.paperutils.SuppressedThrowable)) {
++                            return;
++                        }
+                         net.minecraft.network.Connection networkmanager = listener.getConnection();
+                         String playerIP = io.papermc.paper.configuration.GlobalConfiguration.get().logging.logPlayerIpAddresses ? String.valueOf(networkmanager.getRemoteAddress()) : "<ip address withheld>"; // Paper
+                         if (networkmanager.getPlayer() != null) {
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 77cd45f616e2ff38ad6a648b8b865a99e544f3ec..bb244748f93ffb2142883061c5b1dffe0ded2c6a 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1548,7 +1548,14 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
+             try {
+                 worldserver.timings.doTick.startTiming(); // Spigot
+-                worldserver.tick(shouldKeepTicking);
++                try {
++                    worldserver.tick(shouldKeepTicking);
++                } catch (ReportedException e) {
++                    if (!(e.getCause() instanceof me.LIMPIX31.paperutils.SuppressedThrowable)) throw e.getCause();
++                        MinecraftServer.LOGGER.warn("Prevented crash while ticking world: " + e.getCause());
++                } catch (me.LIMPIX31.paperutils.SuppressedThrowable e) {
++                    MinecraftServer.LOGGER.warn("Prevented crash while ticking world: " + e.getCause());
++                }
+                 // Paper start
+                 for (final io.papermc.paper.chunk.SingleThreadChunkRegionManager regionManager : worldserver.getChunkSource().chunkMap.regionManagers) {
+                     regionManager.recalculateRegions();
+diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+index 79d8bcf3f9b0fe4a65ad7899f858efefac6feaa7..5989da15121c83031875f2c85730651ffbb69f5d 100644
+--- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -614,8 +614,8 @@ public abstract class AbstractContainerMenu {
+                                 if (itemstack1.getCount() > i2) {
+                                     slot2.set(itemstack1.split(i2));
+                                 } else {
+-                                    playerinventory.setItem(button, ItemStack.EMPTY);
+                                     slot2.set(itemstack1);
++                                    playerinventory.setItem(button, ItemStack.EMPTY);
+                                 }
+                             }
+                         } else if (slot2.mayPickup(player) && slot2.mayPlace(itemstack1)) {
+@@ -627,8 +627,8 @@ public abstract class AbstractContainerMenu {
+                                     player.drop(itemstack, true);
+                                 }
+                             } else {
+-                                playerinventory.setItem(button, itemstack);
+                                 slot2.set(itemstack1);
++                                playerinventory.setItem(button, itemstack);
+                                 slot2.onTake(player, itemstack);
+                             }
+                         }
+diff --git a/src/main/java/net/minecraft/world/level/redstone/NeighborUpdater.java b/src/main/java/net/minecraft/world/level/redstone/NeighborUpdater.java
+index 86e46f7d3aea81b5dfb5070a33cf00b436903386..2f176acd8fda8e1f97bdf232e1eadaa933d37281 100644
+--- a/src/main/java/net/minecraft/world/level/redstone/NeighborUpdater.java
++++ b/src/main/java/net/minecraft/world/level/redstone/NeighborUpdater.java
+@@ -64,10 +64,15 @@ public interface NeighborUpdater {
+             // CraftBukkit end
+             state.neighborChanged(world, pos, sourceBlock, sourcePos, notify);
+             // Spigot Start
+-        } catch (StackOverflowError ex) {
+-            world.lastPhysicsProblem = new BlockPos(pos);
+-            // Spigot End
+         } catch (Throwable throwable) {
++            if (throwable instanceof StackOverflowError || throwable instanceof me.LIMPIX31.paperutils.SuppressedThrowable) {
++                throw new me.LIMPIX31.paperutils.SuppressedThrowable("Update suppression");
++            } else {
++                if (throwable instanceof StackOverflowError) {
++                    world.lastPhysicsProblem = new BlockPos(pos);
++                    return;
++                }
++            }
+             CrashReport crashreport = CrashReport.forThrowable(throwable, "Exception while updating neighbours");
+             CrashReportCategory crashreportsystemdetails = crashreport.addCategory("Block being updated");
+ 
