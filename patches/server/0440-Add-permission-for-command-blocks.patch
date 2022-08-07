@@ -18,10 +18,10 @@ index af00442931f9f6cf878bd61137c2f29fc7c8d0b1..431ff490760f54be76847c7b370dbbb4
                  return false;
              } else if (this.player.blockActionRestricted(this.level, pos, this.gameModeForPlayer)) {
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index b3fa92cc2ff977107f310a8d95c0d63aa446295e..30d0c22d4576f0aef49bb9fb08ff3c9a8edf8d5a 100644
+index bc72672a443bab4c157c5a68dbfbed410d6c0fff..42ca8e95c69beecc82f87e374c69386b901fad52 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -829,7 +829,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -881,7 +881,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
          PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());
          if (!this.server.isCommandBlockEnabled()) {
              this.player.sendSystemMessage(Component.translatable("advMode.notEnabled"));
@@ -30,7 +30,7 @@ index b3fa92cc2ff977107f310a8d95c0d63aa446295e..30d0c22d4576f0aef49bb9fb08ff3c9a
              this.player.sendSystemMessage(Component.translatable("advMode.notAllowed"));
          } else {
              BaseCommandBlock commandblocklistenerabstract = null;
-@@ -896,7 +896,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -948,7 +948,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
          PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());
          if (!this.server.isCommandBlockEnabled()) {
              this.player.sendSystemMessage(Component.translatable("advMode.notEnabled"));

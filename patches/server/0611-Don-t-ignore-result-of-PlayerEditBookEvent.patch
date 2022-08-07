@@ -5,10 +5,10 @@ Subject: [PATCH] Don't ignore result of PlayerEditBookEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index a45b2909300e0a66d92702eb85e541e621d27fea..f582c7c41022c8b94ea6c7bc0ac9312499e7c434 100644
+index c9477e3cf2a361b89473743f4e01e00c098c4d95..5f9d482b06141929505489ec605213b84c6d499f 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1221,7 +1221,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1297,7 +1297,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
          }
  
          itemstack.addTagElement("pages", nbttaglist);

@@ -22,18 +22,18 @@ it only impacts data sent from the client.
 Set -DPaper.maxSignLength=XX to change limit or -1 to disable
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 35d65cf4af1990f2aea2767216cc1d838f7473b7..ed951f4645e8ab6c070ed267a665b81bca19fbbb 100644
+index 81c6dd957eb990708fd5f6a1b991a5e8370acf80..933d74f48dfedc15eec76b4e376e51c40bc4bea5 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -276,6 +276,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
-     private final ChatPreviewThrottler chatPreviewThrottler = new ChatPreviewThrottler();
-     private final AtomicReference<Instant> lastChatTimeStamp;
+@@ -293,6 +293,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+     private final LastSeenMessagesValidator lastSeenMessagesValidator;
+     private final FutureChain chatMessageChain;
      private static final long KEEPALIVE_LIMIT = Long.getLong("paper.playerconnection.keepalive", 30) * 1000; // Paper - provide property to set keepalive limit
 +    private static final int MAX_SIGN_LINE_LENGTH = Integer.getInteger("Paper.maxSignLength", 80); // Paper
  
      public ServerGamePacketListenerImpl(MinecraftServer server, Connection connection, ServerPlayer player) {
          this.lastChatTimeStamp = new AtomicReference(Instant.EPOCH);
-@@ -3047,7 +3048,19 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -3286,7 +3287,19 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
  
      @Override
      public void handleSignUpdate(ServerboundSignUpdatePacket packet) {
@@ -52,5 +52,5 @@ index 35d65cf4af1990f2aea2767216cc1d838f7473b7..ed951f4645e8ab6c070ed267a665b81b
 +        List<String> list = (List) Stream.of(lines).map(ChatFormatting::stripFormatting).collect(Collectors.toList());
 +        // Paper end
  
-         this.filterTextPacket(list, (list1) -> {
+         this.filterTextPacket(list).thenAcceptAsync((list1) -> {
              this.updateSignText(packet, list1);

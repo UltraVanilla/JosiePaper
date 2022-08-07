@@ -6,10 +6,10 @@ Subject: [PATCH] Ability to change PlayerProfile in AsyncPreLoginEvent
 This will allow you to change the players name or skin on login.
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-index 145f3eae6622453d47769e10fb30ce8d31d5f847..53e8804b8ee35acdc2c4b3cbe2bc409242840726 100644
+index 158862d2ea50a34dea10e074f3776bc5ed5a327f..fa949d01da7b6c1a489d17955108f7082f959c66 100644
 --- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-@@ -393,8 +393,16 @@ public class ServerLoginPacketListenerImpl implements ServerLoginPacketListener
+@@ -379,8 +379,16 @@ public class ServerLoginPacketListenerImpl implements TickablePacketListener, Se
                          java.util.UUID uniqueId = ServerLoginPacketListenerImpl.this.gameProfile.getId();
                          final org.bukkit.craftbukkit.CraftServer server = ServerLoginPacketListenerImpl.this.server.server;
  

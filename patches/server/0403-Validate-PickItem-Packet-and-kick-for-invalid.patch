@@ -5,10 +5,10 @@ Subject: [PATCH] Validate PickItem Packet and kick for invalid
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index ec82608da0d39a1b60d1595cee9aeae3efef9fac..2c46a7853edda6f9b6a057e1e3ab0919dcd5436d 100644
+index 63f2b6c26fc052c9e9b120c64dca63e18a338543..e465ffc59138325c2292ad23d5301ad7c1a3ddf3 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -918,7 +918,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -970,7 +970,14 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
      @Override
      public void handlePickItem(ServerboundPickItemPacket packet) {
          PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());

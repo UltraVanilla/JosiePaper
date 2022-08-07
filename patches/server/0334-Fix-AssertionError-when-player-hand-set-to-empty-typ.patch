@@ -7,10 +7,10 @@ Fixes an AssertionError when setting the player's item in hand to null or a new 
 Fixes GH-2718
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index ca5342785c49d459203087184baa341da6c93f1f..fcbd099d77b4dec7a91da2b7fb219c300482a83b 100644
+index 43f2069542b71d158ad3ff959b224ddadc434383..20f26991faddffab45f7aadf35163101739b81cf 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1791,6 +1791,10 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1867,6 +1867,10 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
                  this.player.getBukkitEntity().updateInventory(); // SPIGOT-2524
                  return;
              }

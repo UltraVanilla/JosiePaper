@@ -5,10 +5,10 @@ Subject: [PATCH] Allow using signs inside spawn protection
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 25e8e284ab83e0b3d8ef943f287b24ab6aed9447..a45b2909300e0a66d92702eb85e541e621d27fea 100644
+index 02bd9c219e3982b0e61b16e25e4366ad59aea26d..c9477e3cf2a361b89473743f4e01e00c098c4d95 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1771,7 +1771,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1847,7 +1847,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
                  int i = this.player.level.getMaxBuildHeight();
  
                  if (blockposition.getY() < i) {

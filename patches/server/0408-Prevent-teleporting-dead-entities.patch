@@ -5,10 +5,10 @@ Subject: [PATCH] Prevent teleporting dead entities
 
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 2c46a7853edda6f9b6a057e1e3ab0919dcd5436d..5157c257a3480b4f26d4a5830c36725af2d4bd4b 100644
+index e465ffc59138325c2292ad23d5301ad7c1a3ddf3..1382a5f50e2651eda67dffc040232e8168d774f3 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -1559,6 +1559,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -1635,6 +1635,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
      }
  
      public void internalTeleport(double d0, double d1, double d2, float f, float f1, Set<ClientboundPlayerPositionPacket.RelativeArgument> set, boolean flag) {
