@@ -44,15 +44,14 @@ index a87f6380b2c387fb0cdd40d5087b5c93492e3c88..777a9bc2dda2f80a5dea8bfcce31a85b
                                      }
                                  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f925a8d550ecbf2044a37bfe58b30d6578c5f6af..f06df6cd5d7d28013c18d61ccadc0133a19a68bb 100644
+index f925a8d550ecbf2044a37bfe58b30d6578c5f6af..7b4fa3ea38d4e59e579d68525f41fca4e8da5903 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1383,6 +1383,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1383,6 +1383,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              io.papermc.paper.util.CollisionUtil.getCollisions(world, this, collisionBox, potentialCollisions, false, true,
                  false, false, null, null);
  
-+            if ((this instanceof net.minecraft.world.entity.vehicle.Boat
-+                    || this instanceof net.minecraft.world.entity.vehicle.Minecart)
++            if (this instanceof net.minecraft.world.entity.vehicle.Boat
 +                    && io.papermc.paper.util.CollisionUtil.lastBlockIsFreezy) {
 +                // block is "freezy" - do not allow any motion changes while inside of it
 +                return new Vec3(0.0, 0.0, 0.0);
