@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: lordpipe <lordpipe@protonmail.com>
-Date: Thu, 18 Aug 2022 12:00:40 -0600
+Date: Wed, 21 Sep 2022 20:59:29 -0600
 Subject: [PATCH] Soul sand is freezy
 
 Makes it possible to wedge a boat into soul sand without it falling.
@@ -44,13 +44,14 @@ index a87f6380b2c387fb0cdd40d5087b5c93492e3c88..777a9bc2dda2f80a5dea8bfcce31a85b
                                      }
                                  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index f925a8d550ecbf2044a37bfe58b30d6578c5f6af..7b4fa3ea38d4e59e579d68525f41fca4e8da5903 100644
+index a3f1aef9d8f254747bd6580e8e3087a5c6829128..831d84322b688283d6c8860505ea3c2eab68083f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1383,6 +1383,12 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
-             io.papermc.paper.util.CollisionUtil.getCollisions(world, this, collisionBox, potentialCollisions, false, true,
+@@ -1383,6 +1383,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+             io.papermc.paper.util.CollisionUtil.getCollisions(world, this, collisionBox, potentialCollisions, false, this.level.paperConfig().chunks.preventMovingIntoUnloadedChunks,
                  false, false, null, null);
  
++
 +            if (this instanceof net.minecraft.world.entity.vehicle.Boat
 +                    && io.papermc.paper.util.CollisionUtil.lastBlockIsFreezy) {
 +                // block is "freezy" - do not allow any motion changes while inside of it
