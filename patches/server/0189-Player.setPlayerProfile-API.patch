@@ -6,10 +6,10 @@ Subject: [PATCH] Player.setPlayerProfile API
 This can be useful for changing name or skins after a player has logged in.
 
 diff --git a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-index fa949d01da7b6c1a489d17955108f7082f959c66..c83395364edb4f2ba8515326b19c4f1a436a0502 100644
+index 9a7fe61d7de80eaf044c202e1ed13d9e4b59622a..ef09f5f42a89f767060f015af27269ad496d08c7 100644
 --- a/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerLoginPacketListenerImpl.java
-@@ -380,11 +380,11 @@ public class ServerLoginPacketListenerImpl implements TickablePacketListener, Se
+@@ -370,11 +370,11 @@ public class ServerLoginPacketListenerImpl implements TickablePacketListener, Se
                          final org.bukkit.craftbukkit.CraftServer server = ServerLoginPacketListenerImpl.this.server.server;
  
                          // Paper start

@@ -6,10 +6,10 @@ Subject: [PATCH] LivingEntity Hand Raised/Item Use API
 How long an entity has raised hands to charge an attack or use an item
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index bbb7d6bcdc280236a583056cf9ccfc7b8de37706..5c517025576461b426b4a73eea4369f00aeeee41 100644
+index 80efb900e37069f4ff39c35d39456959ca24bfe8..04829ced2048b07aa4b2dcf98a601d1fdd9431fb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -749,5 +749,30 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -795,5 +795,30 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
      public void setShieldBlockingDelay(int delay) {
          getHandle().setShieldBlockingDelay(delay);
      }
