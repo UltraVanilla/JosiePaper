@@ -1309,7 +1309,7 @@ index 93d02b5de0721e3c5903e80bbf8b3b56ec3ab45d..4e7db441f68019d6e5d3359605b76bc4
      }
      // CraftBukkit end
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 521f485366c65527ac3289dd27d8f2e311706a10..5833cc3d5014dad82607afc4d643b6bed885be64 100644
+index 3710f544a491a837b973daedc2dfa51357b70b56..e7fcb402e3d4e0707a28505a9fb6642764034e23 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -1,5 +1,6 @@
@@ -1319,7 +1319,7 @@ index 521f485366c65527ac3289dd27d8f2e311706a10..5833cc3d5014dad82607afc4d643b6be
  import com.google.common.collect.Lists;
  import com.google.common.collect.Maps;
  import com.google.common.collect.Sets;
-@@ -1018,10 +1019,11 @@ public abstract class PlayerList {
+@@ -1019,10 +1020,11 @@ public abstract class PlayerList {
      }
  
      public void saveAll() {
@@ -1425,7 +1425,7 @@ index cdf8020194f2ec1fe7b65b22c8e1f5b1c23eaefa..2db27f5e3e3c1bb0502c055f78c4a81e
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae8b29345f 100644
+index e283e8383a52c74cebd16fa7642a5e3993b2ed1a..8c2d76c27c784536c3b573bf4ae4f47c2c3c4b6b 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -140,7 +140,7 @@ import org.bukkit.event.entity.EntityTeleportEvent;
@@ -1437,7 +1437,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
  
  public abstract class LivingEntity extends Entity {
  
-@@ -2817,7 +2817,6 @@ public abstract class LivingEntity extends Entity {
+@@ -2820,7 +2820,6 @@ public abstract class LivingEntity extends Entity {
  
      @Override
      public void tick() {
@@ -1445,7 +1445,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
          super.tick();
          this.updatingUsingItem();
          this.updateSwimAmount();
-@@ -2859,9 +2858,7 @@ public abstract class LivingEntity extends Entity {
+@@ -2862,9 +2861,7 @@ public abstract class LivingEntity extends Entity {
          }
  
          if (!this.isRemoved()) {
@@ -1455,7 +1455,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
          }
  
          double d0 = this.getX() - this.xo;
-@@ -2943,8 +2940,6 @@ public abstract class LivingEntity extends Entity {
+@@ -2946,8 +2943,6 @@ public abstract class LivingEntity extends Entity {
          if (this.isSleeping()) {
              this.setXRot(0.0F);
          }
@@ -1464,7 +1464,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
      }
  
      public void detectEquipmentUpdates() {
-@@ -3126,7 +3121,6 @@ public abstract class LivingEntity extends Entity {
+@@ -3129,7 +3124,6 @@ public abstract class LivingEntity extends Entity {
  
          this.setDeltaMovement(d4, d5, d6);
          this.level.getProfiler().push("ai");
@@ -1472,7 +1472,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
          if (this.isImmobile()) {
              this.jumping = false;
              this.xxa = 0.0F;
-@@ -3136,7 +3130,6 @@ public abstract class LivingEntity extends Entity {
+@@ -3139,7 +3133,6 @@ public abstract class LivingEntity extends Entity {
              this.serverAiStep();
              this.level.getProfiler().pop();
          }
@@ -1480,7 +1480,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
  
          this.level.getProfiler().pop();
          this.level.getProfiler().push("jump");
-@@ -3171,9 +3164,9 @@ public abstract class LivingEntity extends Entity {
+@@ -3174,9 +3167,9 @@ public abstract class LivingEntity extends Entity {
          this.updateFallFlying();
          AABB axisalignedbb = this.getBoundingBox();
  
@@ -1492,7 +1492,7 @@ index 2bad9717ec4ec16309856a83d8e19735ae1fcbec..bffaa7397e931b7b15a1780989e69aae
          this.level.getProfiler().pop();
          this.level.getProfiler().push("freezing");
          boolean flag1 = this.getType().is(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES);
-@@ -3202,9 +3195,7 @@ public abstract class LivingEntity extends Entity {
+@@ -3205,9 +3198,7 @@ public abstract class LivingEntity extends Entity {
              this.checkAutoSpinAttack(axisalignedbb, this.getBoundingBox());
          }
  
@@ -1588,10 +1588,10 @@ index dec38e58e30c84887e9d29436c0f76c70c0a627d..be08224c8107aab3e9a3645a20977dd1
      private static final CraftPersistentDataTypeRegistry DATA_TYPE_REGISTRY = new CraftPersistentDataTypeRegistry();
      public CraftPersistentDataContainer persistentDataContainer;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index ab986a3d1dc2f605b5b84d2b62cd97007e3a2c22..58a245b2ca6e65d491694142ad04d38236b46434 100644
+index bcd0287d99eeba2b3534b4a298dc4b79b293ec58..b322d9b7bd9e107a9adf995b6c4db4ff0af05fc1 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-@@ -681,6 +681,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -680,6 +680,7 @@ public class LevelChunk extends ChunkAccess {
              server.getPluginManager().callEvent(new org.bukkit.event.world.ChunkLoadEvent(this.bukkitChunk, this.needsDecoration));
  
              if (this.needsDecoration) {
@@ -1599,7 +1599,7 @@ index ab986a3d1dc2f605b5b84d2b62cd97007e3a2c22..58a245b2ca6e65d491694142ad04d382
                  this.needsDecoration = false;
                  java.util.Random random = new java.util.Random();
                  random.setSeed(this.level.getSeed());
-@@ -700,6 +701,7 @@ public class LevelChunk extends ChunkAccess {
+@@ -699,6 +700,7 @@ public class LevelChunk extends ChunkAccess {
                      }
                  }
                  server.getPluginManager().callEvent(new org.bukkit.event.world.ChunkPopulateEvent(this.bukkitChunk));
@@ -1839,10 +1839,10 @@ index b0ffa23faf62629043dfd613315eaf9c5fcc2cfe..00000000000000000000000000000000
 -    }
 -}
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index ef5e29e0a66f8d4cb819c4383cf3f1317d4e5bb0..a2dd86fde8882c774ad44be3ca66f7c80bb77389 100644
+index 10a9a108448509ceb7d40a4bddb067384c4c9f26..d5e6123622f6bbc4c3b8b91be7f9ba8e5c1c22d8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2275,6 +2275,14 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2319,6 +2319,14 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
              CraftPlayer.this.getHandle().connection.send(new net.minecraft.network.protocol.game.ClientboundSystemChatPacket(components, position == net.md_5.bungee.api.ChatMessageType.ACTION_BAR));
          }
