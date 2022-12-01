@@ -21,6 +21,31 @@ index 6dbac0f93481256dd57e76630ae9eea9d5c56849..e260462933a9f7065b2360e6bf9e4ee5
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
+diff --git a/src/main/java/com/mojang/brigadier/exceptions/CommandSyntaxException.java b/src/main/java/com/mojang/brigadier/exceptions/CommandSyntaxException.java
+index 3370731ee064d2693b972a0765c13dd4fd69f66a..614eba6cc55d1eb7755cac35c671cb6f6cacca13 100644
+--- a/src/main/java/com/mojang/brigadier/exceptions/CommandSyntaxException.java
++++ b/src/main/java/com/mojang/brigadier/exceptions/CommandSyntaxException.java
+@@ -5,7 +5,7 @@ package com.mojang.brigadier.exceptions;
+ 
+ import com.mojang.brigadier.Message;
+ 
+-public class CommandSyntaxException extends Exception {
++public class CommandSyntaxException extends Exception implements net.kyori.adventure.util.ComponentMessageThrowable { // Paper
+     public static final int CONTEXT_AMOUNT = 10;
+     public static boolean ENABLE_COMMAND_STACK_TRACES = true;
+     public static BuiltInExceptionProvider BUILT_IN_EXCEPTIONS = new BuiltInExceptions();
+@@ -73,4 +73,11 @@ public class CommandSyntaxException extends Exception {
+     public int getCursor() {
+         return cursor;
+     }
++
++    // Paper start
++    @Override
++    public @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component componentMessage() {
++        return io.papermc.paper.brigadier.PaperBrigadier.componentFromMessage(this.message);
++    }
++    // Paper end
+ }
 diff --git a/src/main/java/com/mojang/brigadier/tree/CommandNode.java b/src/main/java/com/mojang/brigadier/tree/CommandNode.java
 index da6250df1c5f3385b683cffde47754bca4606f5e..3384501f83d445f45aa8233e98c7597daa67b8ef 100644
 --- a/src/main/java/com/mojang/brigadier/tree/CommandNode.java
@@ -34,7 +59,7 @@ index da6250df1c5f3385b683cffde47754bca4606f5e..3384501f83d445f45aa8233e98c7597d
      public void removeCommand(String name) {
          this.children.remove(name);
 diff --git a/src/main/java/net/minecraft/commands/CommandSourceStack.java b/src/main/java/net/minecraft/commands/CommandSourceStack.java
-index 3308d684fc6cd0a83e190a52693b29d30e0087cb..fa258155b1cbdd8efde15ec59986d0ab56245ddd 100644
+index a5c31a999dd7fb30436b21c04e2cbc95ee4262d2..891d1fb88d8de9d1b34f300ba640cfc6fbd8a4de 100644
 --- a/src/main/java/net/minecraft/commands/CommandSourceStack.java
 +++ b/src/main/java/net/minecraft/commands/CommandSourceStack.java
 @@ -39,7 +39,7 @@ import net.minecraft.world.phys.Vec2;
@@ -46,7 +71,7 @@ index 3308d684fc6cd0a83e190a52693b29d30e0087cb..fa258155b1cbdd8efde15ec59986d0ab
  
      public static final SimpleCommandExceptionType ERROR_NOT_PLAYER = new SimpleCommandExceptionType(Component.translatable("permissions.requires.player"));
      public static final SimpleCommandExceptionType ERROR_NOT_ENTITY = new SimpleCommandExceptionType(Component.translatable("permissions.requires.entity"));
-@@ -172,6 +172,26 @@ public class CommandSourceStack implements SharedSuggestionProvider {
+@@ -173,6 +173,26 @@ public class CommandSourceStack implements SharedSuggestionProvider {
          return this.entity != null ? this.entity.asChatSender() : ChatSender.SYSTEM;
      }
  
@@ -106,7 +131,7 @@ index c4315531f93f4ed68b4621157b02572886e1ed30..b141d251eedd31bd115342b878afd68d
  
              if (commandnode2.canUse(source)) {
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 61a0cee760d058e382c2756096a5acce050d9f9d..ac5f70ee86cc5a01b046e8e610434742448e3919 100644
+index d372d019e714a040d5ae05ed8653b4541717cd61..c959941b6ba5d9ed8e6ce88ff3902afc4c97d139 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -836,8 +836,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic

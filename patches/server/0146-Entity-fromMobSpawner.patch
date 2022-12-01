@@ -5,7 +5,7 @@ Subject: [PATCH] Entity#fromMobSpawner()
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6e1b53317c4107f907e551a9baeaf64909f6de87..65a22c154807c416a63fbf68dad72175b51a52d4 100644
+index 58256b341aa15e946abef464453c0ffcaf55b372..36beb42ccdb348c91020502f935b3a1590a7472e 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -380,6 +380,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {

@@ -6,7 +6,7 @@ Subject: [PATCH] add more information to Entity.toString()
 UUID, ticks lived, valid, dead
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 65a22c154807c416a63fbf68dad72175b51a52d4..2e988d59404c52cd9c290b96d21f886573cda0fa 100644
+index 36beb42ccdb348c91020502f935b3a1590a7472e..f67480cc4ff05d23a16b63dbe986d0d96739496b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -2968,7 +2968,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
