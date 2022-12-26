@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: lordpipe <lordpipe@protonmail.com>
-Date: Wed, 21 Sep 2022 20:59:29 -0600
+Date: Mon, 26 Dec 2022 06:39:00 -0700
 Subject: [PATCH] Soul sand is freezy
 
 Makes it possible to wedge a boat into soul sand without it falling.
@@ -44,20 +44,20 @@ index a87f6380b2c387fb0cdd40d5087b5c93492e3c88..777a9bc2dda2f80a5dea8bfcce31a85b
                                      }
                                  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a3f1aef9d8f254747bd6580e8e3087a5c6829128..831d84322b688283d6c8860505ea3c2eab68083f 100644
+index 7555b04dcf274bb624b89f2eb9ff80da0056de4e..4f346eefe09af31299219310a28f8016e767cb27 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1383,6 +1383,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1392,6 +1392,13 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              io.papermc.paper.util.CollisionUtil.getCollisions(world, this, collisionBox, potentialCollisions, false, this.level.paperConfig().chunks.preventMovingIntoUnloadedChunks,
                  false, false, null, null);
  
-+
-+            if (this instanceof net.minecraft.world.entity.vehicle.Boat
++            if ((this instanceof net.minecraft.world.entity.vehicle.Boat
++                    || this instanceof net.minecraft.world.entity.vehicle.Minecart)
 +                    && io.papermc.paper.util.CollisionUtil.lastBlockIsFreezy) {
 +                // block is "freezy" - do not allow any motion changes while inside of it
 +                return new Vec3(0.0, 0.0, 0.0);
 +            }
 +
-             if (io.papermc.paper.util.CollisionUtil.isCollidingWithBorderEdge(world.getWorldBorder(), collisionBox)) {
+             if (collidingWithWorldBorder = io.papermc.paper.util.CollisionUtil.isCollidingWithBorderEdge(world.getWorldBorder(), collisionBox)) { // Paper - this line *is* correct, ignore the IDE warning about assignments being used as a condition
                  io.papermc.paper.util.CollisionUtil.addBoxesToIfIntersects(world.getWorldBorder().getCollisionShape(), collisionBox, potentialCollisions);
              }
