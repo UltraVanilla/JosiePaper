@@ -2349,7 +2349,7 @@ index be097f13dba5d408f58d6fada893bed2638d4219..3d7d1ba148dbc3591d8c76b99a2ee7d9
  
                  @Override
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index c9497bead11bf2b3b859f1c91c9692ce6007e5ed..046560b409c73c73f2c8e645625697bde3e564c2 100644
+index 25227822aa0e1dd7fbbe98a0925ccd023af8d0dc..7cd2af9a08bfca0c7de1ecac21ee7f8a790e8b64 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -8,6 +8,7 @@ import com.mojang.logging.LogUtils;
@@ -2455,7 +2455,7 @@ index c9497bead11bf2b3b859f1c91c9692ce6007e5ed..046560b409c73c73f2c8e645625697bd
              return null;
          }
          return entity;
-@@ -1139,7 +1139,7 @@ public abstract class PlayerList {
+@@ -1140,7 +1140,7 @@ public abstract class PlayerList {
      public void removeAll() {
          // CraftBukkit start - disconnect safely
          for (ServerPlayer player : this.players) {
@@ -2464,7 +2464,7 @@ index c9497bead11bf2b3b859f1c91c9692ce6007e5ed..046560b409c73c73f2c8e645625697bd
          }
          // CraftBukkit end
  
-@@ -1180,14 +1180,24 @@ public abstract class PlayerList {
+@@ -1181,14 +1181,24 @@ public abstract class PlayerList {
      }
  
      public void broadcastChatMessage(PlayerChatMessage message, ServerPlayer sender, ChatType.Bound params) {
@@ -2491,7 +2491,7 @@ index c9497bead11bf2b3b859f1c91c9692ce6007e5ed..046560b409c73c73f2c8e645625697bd
          OutgoingChatMessage outgoingchatmessage = OutgoingChatMessage.create(message);
          boolean flag1 = false;
  
-@@ -1197,7 +1207,7 @@ public abstract class PlayerList {
+@@ -1198,7 +1208,7 @@ public abstract class PlayerList {
              ServerPlayer entityplayer1 = (ServerPlayer) iterator.next();
  
              flag2 = shouldSendFiltered.test(entityplayer1);
@@ -2500,7 +2500,7 @@ index c9497bead11bf2b3b859f1c91c9692ce6007e5ed..046560b409c73c73f2c8e645625697bd
          }
  
          if (flag1 && sender != null) {
-@@ -1206,7 +1216,7 @@ public abstract class PlayerList {
+@@ -1207,7 +1217,7 @@ public abstract class PlayerList {
  
      }
  
@@ -2792,7 +2792,7 @@ index f4455d8a45fbd687a21a46a4c2850f9a3e6432c5..e91305263fcf6929fe62e5e8da467217
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/Main.java b/src/main/java/org/bukkit/craftbukkit/Main.java
-index 1d4f6e7fcfaaee40b06f74d250d04f7a36b6458b..f7b2211d04bb6b4a11ad7499c6e3a0e945e6d9da 100644
+index 7e9381fcdaafb15b22d9f79592422b165b3e2523..5448d2a6fe8cace246b81742da19666ec24ca48c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/Main.java
 +++ b/src/main/java/org/bukkit/craftbukkit/Main.java
 @@ -19,6 +19,12 @@ public class Main {
@@ -3903,10 +3903,10 @@ index 6a64fbb8b4937f39d5fdc2e2cbec26c83c74c486..7d6b5fdb00a5c1614849735634262a36
      public String getTitle() {
          return CraftChatMessage.fromComponent(this.container.getTitle());
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-index 4455bd0803327363bb76c52b4842a5cfe7f5ec90..8b01bed0d3f3b655783c3d53acf876d7eaf727c6 100644
+index 9c5be190328a2bf79d7c02d8d3f38eea3771a534..102e3572424478375a2d175e4d5b6aacba8412a8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
-@@ -408,4 +408,17 @@ public final class CraftItemFactory implements ItemFactory {
+@@ -410,4 +410,17 @@ public final class CraftItemFactory implements ItemFactory {
      public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
          return ((CraftMetaItem) meta).updateMaterial(material);
      }
@@ -4178,10 +4178,10 @@ index 507fa96a3fb904b74429df5756c9a6378ec8c5b7..abb9e88abc74135284b941e040d40586
 +    // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-index f2737146ffb005dec43bd796043c53397a3b7485..0a5f063bc74e1dae67167537437ebd7e4ddf113a 100644
+index 8ed06dc812fbda72667352fa42c03f9d9ae7ca7e..78029398774f1060e3522e4613259be894d68c22 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
-@@ -746,6 +746,18 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+@@ -747,6 +747,18 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
          return !(this.hasDisplayName() || this.hasLocalizedName() || this.hasEnchants() || (this.lore != null) || this.hasCustomModelData() || this.hasBlockData() || this.hasRepairCost() || !this.unhandledTags.isEmpty() || !this.persistentDataContainer.isEmpty() || this.hideFlag != 0 || this.isUnbreakable() || this.hasDamage() || this.hasAttributeModifiers());
      }
  
@@ -4200,7 +4200,7 @@ index f2737146ffb005dec43bd796043c53397a3b7485..0a5f063bc74e1dae67167537437ebd7e
      @Override
      public String getDisplayName() {
          return CraftChatMessage.fromJSONComponent(displayName);
-@@ -781,6 +793,18 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+@@ -782,6 +794,18 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
          return this.lore != null && !this.lore.isEmpty();
      }
  
