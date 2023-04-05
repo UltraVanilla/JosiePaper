@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: William Blake Galbreath <blake.galbreath@gmail.com>
+Date: Sat, 20 Apr 2019 19:47:29 -0500
+Subject: [PATCH] Expose the internal current tick
+
+
+diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
+index befbbefc97abbac819f4034e3df62f8437844c39..16e6d0929ce4c7313418aa4635fb77bf112b2936 100644
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2288,6 +2288,10 @@ public final class Bukkit {
+     public static com.destroystokyo.paper.profile.PlayerProfile createProfileExact(@Nullable UUID uuid, @Nullable String name) {
+         return server.createProfileExact(uuid, name);
+     }
++
++    public static int getCurrentTick() {
++        return server.getCurrentTick();
++    }
+     // Paper end
+ 
+     @NotNull
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 291abd48c3c8af0807bce312c18d8cf287c1f8cf..411031322c97d220957e4cff43ca3758c18d60a8 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1987,5 +1987,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     @NotNull
+     com.destroystokyo.paper.profile.PlayerProfile createProfileExact(@Nullable UUID uuid, @Nullable String name);
++
++    /**
++     * Get the current internal server tick
++     *
++     * @return Current tick
++     */
++    int getCurrentTick();
+     // Paper end
+ }

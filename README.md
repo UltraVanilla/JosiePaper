@@ -4,7 +4,7 @@ Paper [![Paper Build Status](https://img.shields.io/github/actions/workflow/stat
 [![Open Collective](https://img.shields.io/opencollective/all/papermc?label=OpenCollective%20Sponsors)](https://opencollective.com/papermc)
 ===========
 
-High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.
+High-performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.
 
 
 **Support and Project Discussion:**
@@ -14,7 +14,7 @@ How To (Server Admins)
 ------
 Paperclip is a jar file that you can download and run just like a normal jar file.
 
-Download Paper from our [downloads page](https://papermc.io/downloads).
+Download Paper from our [downloads page](https://papermc.io/downloads/paper).
 
 Run the Paperclip jar directly from your server. Just like old times
 
@@ -38,7 +38,7 @@ How To (Plugin Developers)
 <dependency>
     <groupId>io.papermc.paper</groupId>
     <artifactId>paper-api</artifactId>
-    <version>1.19.3-R0.1-SNAPSHOT</version>
+    <version>1.19.4-R0.1-SNAPSHOT</version>
     <scope>provided</scope>
 </dependency>
  ```
@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
 }
 
 java {

@@ -5,10 +5,10 @@ Subject: [PATCH] Add LivingEntity#getTargetEntity
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index d9b2f2e230abd3ee5b7d77c76472a86cb38255a4..03004dbb8ab4cdb982ea2f6d7464258d025ff411 100644
+index 73cefc7ec582cb0fbfcff32cb9311f34ec2f31f0..eb58b3230b46ade4403c31113d244b933b8a4a71 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -117,6 +117,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
+@@ -115,6 +115,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
  import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
  import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
  import net.minecraft.world.phys.AABB;
@@ -16,7 +16,7 @@ index d9b2f2e230abd3ee5b7d77c76472a86cb38255a4..03004dbb8ab4cdb982ea2f6d7464258d
  import net.minecraft.world.phys.HitResult;
  import net.minecraft.world.phys.Vec3;
  import net.minecraft.world.scores.PlayerTeam;
-@@ -3832,6 +3833,38 @@ public abstract class LivingEntity extends Entity {
+@@ -3792,6 +3793,38 @@ public abstract class LivingEntity extends Entity implements Attackable {
          return level.clip(raytrace);
      }
  
@@ -29,7 +29,7 @@ index d9b2f2e230abd3ee5b7d77c76472a86cb38255a4..03004dbb8ab4cdb982ea2f6d7464258d
 +        Vec3 direction = this.getLookAngle();
 +        Vec3 end = start.add(direction.x * maxDistance, direction.y * maxDistance, direction.z * maxDistance);
 +
-+        List<Entity> entityList = level.getEntities(this, getBoundingBox().expandTowards(direction.x * maxDistance, direction.y * maxDistance, direction.z * maxDistance).inflate(1.0D, 1.0D, 1.0D), EntitySelector.NO_CREATIVE_OR_SPECTATOR.and(Entity::isPickable));
++        List<Entity> entityList = level.getEntities(this, getBoundingBox().expandTowards(direction.x * maxDistance, direction.y * maxDistance, direction.z * maxDistance).inflate(1.0D, 1.0D, 1.0D), EntitySelector.NO_SPECTATORS.and(Entity::isPickable));
 +
 +        double distance = 0.0D;
 +        EntityHitResult result = null;
@@ -56,7 +56,7 @@ index d9b2f2e230abd3ee5b7d77c76472a86cb38255a4..03004dbb8ab4cdb982ea2f6d7464258d
  
      public int getShieldBlockingDelay() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 76c66e3533779a966d164637bac0c66415605b2c..0bdb8a887ac159c58ec39d4aaa56cef404eaa6b2 100644
+index 8601639fd5dfb7ce68d6bd7803efd10438338483..b19185c16f8fecbefef697017e8dcfd249306fe3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -1,5 +1,6 @@

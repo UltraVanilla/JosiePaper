@@ -5,7 +5,7 @@ Subject: [PATCH] Ability to get Tile Entities from a chunk without snapshots
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftChunk.java b/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
-index 46b1cce7d482adea911b71f3e3623ac0574a85ae..6772b7e6ebded67f656dfb1af99e4d516aca67c5 100644
+index e4a533ace96829414844607a013831dba7a1e73e..832c6d92daaa96210a9c7edbd357ca824a60a4a5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftChunk.java
 @@ -4,8 +4,10 @@ import com.google.common.base.Preconditions;

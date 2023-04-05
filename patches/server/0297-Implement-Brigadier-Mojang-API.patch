@@ -10,7 +10,7 @@ Adds CommandRegisteredEvent
   - Allows manipulating the CommandNode to add more children/metadata for the client
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 28ca89a36d9cf9b7aca51a21be89e220c8e07589..a4b47b69e14643cd82d71d18941144ecbf50db8b 100644
+index 6ca33c80c8bd4d87953103c06804fa9a0eef4f3c..b6b077262132be3b30f81a2a6c9288afbd11c358 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -8,6 +8,7 @@ plugins {
@@ -59,7 +59,7 @@ index da6250df1c5f3385b683cffde47754bca4606f5e..3384501f83d445f45aa8233e98c7597d
      public void removeCommand(String name) {
          this.children.remove(name);
 diff --git a/src/main/java/net/minecraft/commands/CommandSourceStack.java b/src/main/java/net/minecraft/commands/CommandSourceStack.java
-index 36bbe7d0b2089361beda89097c15eca9ab48a57d..b8f5b5895bf75aa8e08b2b0431ef6fdacd235430 100644
+index 65d8c7d5aab8c6afe3c5671a90ad0fbc03bedfdd..efad6dc30ff2731fdaed9c7f8d974aba8d8a4bcf 100644
 --- a/src/main/java/net/minecraft/commands/CommandSourceStack.java
 +++ b/src/main/java/net/minecraft/commands/CommandSourceStack.java
 @@ -41,7 +41,7 @@ import net.minecraft.world.phys.Vec2;
@@ -99,10 +99,10 @@ index 36bbe7d0b2089361beda89097c15eca9ab48a57d..b8f5b5895bf75aa8e08b2b0431ef6fda
      public boolean hasPermission(int level) {
          // CraftBukkit start
 diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
-index 6e931aa7220180336b64fbb3b4090df278fca0fa..feb9e827357b3ffb76dfff90350e513592441d8e 100644
+index 286dab2ed3c6b962c9702b8b10105e1456b04f7b..7d47e15468f59ce7bc25f692e9963a29d00117cb 100644
 --- a/src/main/java/net/minecraft/commands/Commands.java
 +++ b/src/main/java/net/minecraft/commands/Commands.java
-@@ -404,6 +404,7 @@ public class Commands {
+@@ -432,6 +432,7 @@ public class Commands {
              bukkit.add(node.getName());
          }
          // Paper start - Async command map building
@@ -110,7 +110,7 @@ index 6e931aa7220180336b64fbb3b4090df278fca0fa..feb9e827357b3ffb76dfff90350e5135
          net.minecraft.server.MinecraftServer.getServer().execute(() -> {
             runSync(player, bukkit, rootcommandnode);
          });
-@@ -411,6 +412,7 @@ public class Commands {
+@@ -439,6 +440,7 @@ public class Commands {
  
      private void runSync(ServerPlayer player, Collection<String> bukkit, RootCommandNode<SharedSuggestionProvider> rootcommandnode) {
          // Paper end - Async command map building
@@ -118,7 +118,7 @@ index 6e931aa7220180336b64fbb3b4090df278fca0fa..feb9e827357b3ffb76dfff90350e5135
          PlayerCommandSendEvent event = new PlayerCommandSendEvent(player.getBukkitEntity(), new LinkedHashSet<>(bukkit));
          event.getPlayer().getServer().getPluginManager().callEvent(event);
  
-@@ -429,6 +431,11 @@ public class Commands {
+@@ -457,6 +459,11 @@ public class Commands {
  
          while (iterator.hasNext()) {
              CommandNode<CommandSourceStack> commandnode2 = (CommandNode) iterator.next();
@@ -131,10 +131,10 @@ index 6e931aa7220180336b64fbb3b4090df278fca0fa..feb9e827357b3ffb76dfff90350e5135
  
              if (commandnode2.canUse(source)) {
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 60c9b8d45ae4884883fce1b402bf9ed2906aff79..428f300a33589910eae058b77bb7aa611f2578e7 100644
+index fc36fb064dc09ea97062fcb782422821ff24940b..773170c5443dce6e64762e4504d222a5b5bb8ae3 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -828,8 +828,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -830,8 +830,12 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
                          ParseResults<CommandSourceStack> parseresults = this.server.getCommands().getDispatcher().parse(stringreader, this.player.createCommandSourceStack());
  
                          this.server.getCommands().getDispatcher().getCompletionSuggestions(parseresults).thenAccept((suggestions) -> {
@@ -149,7 +149,7 @@ index 60c9b8d45ae4884883fce1b402bf9ed2906aff79..428f300a33589910eae058b77bb7aa61
                          });
                      });
                  }
-@@ -844,7 +848,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
+@@ -846,7 +850,13 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Tic
                          builder.suggest(completion.suggestion(), PaperAdventure.asVanilla(completion.tooltip()));
                      }
                  });

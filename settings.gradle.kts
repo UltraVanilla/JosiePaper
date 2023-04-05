@@ -1,5 +1,16 @@
 import java.util.Locale
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://repo.papermc.io/repository/maven-public/")
+    }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.4.0"
+}
+
 if (!file(".git").exists()) {
     val errorText = """
         
@@ -11,20 +22,13 @@ if (!file(".git").exists()) {
          zip from GitHub.
          
          Built Paper jars are available for download at
-         https://papermc.io/downloads
+         https://papermc.io/downloads/paper
          
          See https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md
          for further information on building and modifying Paper.
         ===================================================
     """.trimIndent()
     error(errorText)
-}
-
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven("https://repo.papermc.io/repository/maven-public/")
-    }
 }
 
 rootProject.name = "paper"

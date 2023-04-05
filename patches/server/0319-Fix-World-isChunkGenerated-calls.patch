@@ -8,10 +8,10 @@ This patch also adds a chunk status cache on region files (note that
 its only purpose is to cache the status on DISK)
 
 diff --git a/src/main/java/net/minecraft/server/level/ChunkMap.java b/src/main/java/net/minecraft/server/level/ChunkMap.java
-index 23bbd70dd2dd487caf972c2b1a6c85a1caa3fbcd..7c9b73136b4fc5fda96317001eb8a32245b9768a 100644
+index 27b646341bdae8918649c5e9fdf05708638ad835..299c7c60edf491cc44e609517474d8247fb6c724 100644
 --- a/src/main/java/net/minecraft/server/level/ChunkMap.java
 +++ b/src/main/java/net/minecraft/server/level/ChunkMap.java
-@@ -671,9 +671,13 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -674,9 +674,13 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
      // Paper end
  
      private CompletableFuture<Optional<CompoundTag>> readChunk(ChunkPos chunkPos) {
@@ -28,7 +28,7 @@ index 23bbd70dd2dd487caf972c2b1a6c85a1caa3fbcd..7c9b73136b4fc5fda96317001eb8a322
      }
  
      // CraftBukkit start
-@@ -682,6 +686,63 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
+@@ -685,6 +689,63 @@ public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider
          // CraftBukkit end
      }
  
@@ -156,7 +156,7 @@ index 8f729134d8f024678f3f5927059791e28ccb5b90..b294ef87fb93e7f4651dc04128124f29
              } catch (Throwable throwable) {
                  if (dataoutputstream != null) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 31a4424670bbf631845ab0ec61e523d4aeea20f6..6409a71898b7934c81700cd72bb4173f49436fce 100644
+index ba6d74692039c39660ed5e1d960cb090553a82f0..19f711f82386aaa731699f60ddb95ac208bf3a19 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -298,9 +298,23 @@ public class CraftWorld extends CraftRegionAccessor implements World {

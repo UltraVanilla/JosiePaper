@@ -5,10 +5,10 @@ Subject: [PATCH] Add ray tracing methods to LivingEntity
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 677ba704c32e590f3298575b1cc060bb69414ca4..dc78b04128c5eb2375a049948133aa05fff2c022 100644
+index dd82cef26160a1794c47494c99c59eb329879b7b..d29519bd75e6e5a97b06aae86c485b49c4415fb8 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -3772,6 +3772,20 @@ public abstract class LivingEntity extends Entity {
+@@ -3732,6 +3732,20 @@ public abstract class LivingEntity extends Entity implements Attackable {
      }
  
      // Paper start
@@ -30,7 +30,7 @@ index 677ba704c32e590f3298575b1cc060bb69414ca4..dc78b04128c5eb2375a049948133aa05
  
      public int getShieldBlockingDelay() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 04829ced2048b07aa4b2dcf98a601d1fdd9431fb..76c66e3533779a966d164637bac0c66415605b2c 100644
+index a9642e95cde4dc1c3cb9da50c921171c47665536..8601639fd5dfb7ce68d6bd7803efd10438338483 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 @@ -200,6 +200,33 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
