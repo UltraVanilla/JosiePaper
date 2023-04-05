@@ -13,10 +13,10 @@ limiting incoming data from packets in some other way.
 Removed in 1.17: It was from a different time before books were as jank as they are now. As time has gone on they've only proven to be worse and worse.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-index a33dd184ea51df7e59ed08e5e2b0ea4ed9dadff5..1d94d285951faa98ff1f70c3c5330dfaa77cb691 100644
+index a5d7fae348b0b262a0a8a5e8e76f1bc75ca52a16..fd238b031ab36044d33864d752323d523864597f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-@@ -42,6 +42,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -38,6 +38,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
      static final int MAX_PAGES = 100;
      static final int MAX_PAGE_LENGTH = 320; // 256 limit + 64 characters to allow for psuedo colour codes
      static final int MAX_TITLE_LENGTH = 32;
@@ -24,7 +24,7 @@ index a33dd184ea51df7e59ed08e5e2b0ea4ed9dadff5..1d94d285951faa98ff1f70c3c5330dfa
  
      protected String title;
      protected String author;
-@@ -244,7 +245,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -234,7 +235,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          if (title == null) {
              this.title = null;
              return true;
@@ -33,7 +33,7 @@ index a33dd184ea51df7e59ed08e5e2b0ea4ed9dadff5..1d94d285951faa98ff1f70c3c5330dfa
              return false;
          }
  
-@@ -441,7 +442,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -435,7 +436,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
      String validatePage(String page) {
          if (page == null) {
              page = "";
@@ -42,7 +42,7 @@ index a33dd184ea51df7e59ed08e5e2b0ea4ed9dadff5..1d94d285951faa98ff1f70c3c5330dfa
              page = page.substring(0, MAX_PAGE_LENGTH);
          }
          return page;
-@@ -451,7 +452,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -445,7 +446,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          // asserted: page != null
          if (this.pages == null) {
              this.pages = new ArrayList<String>();
