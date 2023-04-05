@@ -24,23 +24,10 @@ dependency-reduced-pom.xml
 .*.sw[a-p]
 
 # various other potential build files
+build/
 bin/
 dist/
 manifest.mf
-
-/work/Temp/
-work/1.*
-work/Minecraft
-work/BuildData
-work/Bukkit
-work/CraftBukkit
-work/Paperclip
-work/Spigot
-work/Spigot-Server
-work/Spigot-API
-work/*.jar
-work/test-server
-work/ForgeFlower
 
 # Mac filesystem dust
 .DS_Store/
@@ -53,22 +40,13 @@ work/ForgeFlower
 .idea/
 out/
 
-# JetBrains Fleet
-.fleet/
-
 # Linux temp files
 *~
 
 # other stuff
 run/
 
-Paper-Server
-Paper-API
-Paperclip.jar
-paperclip.jar
-paperclip-*.jar
-paperclip.properties
+ultrapaper-server
+ultrapaper-api
 
 !gradle/wrapper/gradle-wrapper.jar
-
-test-plugin.settings.gradle.kts
