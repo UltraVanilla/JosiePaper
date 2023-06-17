@@ -2,9 +2,9 @@ plugins {
     java
     `maven-publish`
 
-    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
+    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.5.4"
+    id("io.papermc.paperweight.patcher") version "1.5.5"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
