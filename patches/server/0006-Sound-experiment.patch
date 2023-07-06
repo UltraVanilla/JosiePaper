@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordpipe <lordpipe@protonmail.com>
+Date: Thu, 6 Jul 2023 06:20:52 -0600
+Subject: [PATCH] Sound experiment
+
+
+diff --git a/src/main/java/net/minecraft/sounds/SoundEvent.java b/src/main/java/net/minecraft/sounds/SoundEvent.java
+index 31fbc12b9d704e10f9cf1221361195f41438cabf..29c38b1f89420f20c7625f419b45ca98d1083366 100644
+--- a/src/main/java/net/minecraft/sounds/SoundEvent.java
++++ b/src/main/java/net/minecraft/sounds/SoundEvent.java
+@@ -49,7 +49,7 @@ public class SoundEvent {
+         if (this.newSystem) {
+             return this.range;
+         } else {
+-            return volume > 1.0F ? 16.0F * volume : 16.0F;
++            return volume > 1.0F ? (16.0F * 4.0F) * volume : (16.0F * 4.0F); // UltraPaper - sound experiment
+         }
+     }
+ 
