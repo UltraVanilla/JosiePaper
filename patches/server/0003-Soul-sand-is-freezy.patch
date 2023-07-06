@@ -44,10 +44,10 @@ index a87f6380b2c387fb0cdd40d5087b5c93492e3c88..777a9bc2dda2f80a5dea8bfcce31a85b
                                      }
                                  }
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 4705d7066207250c03a5f98eef61554c901f2e35..947e8a5fb1d559333650ce66dc8954ce4a218cf0 100644
+index 305b43071aa1cf8feee75fae757bb7734ae33771..4b4919d39fc114ed0b2046cdf120f61213b10b51 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -1393,6 +1393,15 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -1484,6 +1484,15 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
              io.papermc.paper.util.CollisionUtil.getCollisions(world, this, collisionBox, potentialCollisions, false, this.level.paperConfig().chunks.preventMovingIntoUnloadedChunks,
                  false, false, null, null);
  

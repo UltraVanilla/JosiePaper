@@ -13,7 +13,7 @@ limiting incoming data from packets in some other way.
 Removed in 1.17: It was from a different time before books were as jank as they are now. As time has gone on they've only proven to be worse and worse.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-index a5d7fae348b0b262a0a8a5e8e76f1bc75ca52a16..fd238b031ab36044d33864d752323d523864597f 100644
+index 2a08b1ac6e9aac81012997637b4cad59f0f1125a..7139718fdfb2aa988a063fbee13473199f714bed 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 @@ -38,6 +38,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
@@ -33,7 +33,7 @@ index a5d7fae348b0b262a0a8a5e8e76f1bc75ca52a16..fd238b031ab36044d33864d752323d52
              return false;
          }
  
-@@ -435,7 +436,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -433,7 +434,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
      String validatePage(String page) {
          if (page == null) {
              page = "";
@@ -42,7 +42,7 @@ index a5d7fae348b0b262a0a8a5e8e76f1bc75ca52a16..fd238b031ab36044d33864d752323d52
              page = page.substring(0, MAX_PAGE_LENGTH);
          }
          return page;
-@@ -445,7 +446,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -443,7 +444,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          // asserted: page != null
          if (this.pages == null) {
              this.pages = new ArrayList<String>();
