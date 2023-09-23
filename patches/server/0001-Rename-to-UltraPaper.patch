@@ -16,7 +16,7 @@ index 57f2c414dbfe127c193002fbc8eeb22e94e9cb55..1b3866baed683401bf29985e72edf0b0
 -    implementation(project(":paper-mojangapi"))
 +    // UltraPaper start
 +    implementation(project(":ultrapaper-api"))
-+    implementation("io.papermc.paper:paper-mojangapi:1.19.4-R0.1-SNAPSHOT") {
++    implementation("io.papermc.paper:paper-mojangapi:1.20.1-R0.1-SNAPSHOT") {
 +        exclude("io.papermc.paper", "paper-api")
 +    }
 +    // UltraPaper end
