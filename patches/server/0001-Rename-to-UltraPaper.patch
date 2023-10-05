@@ -5,7 +5,7 @@ Subject: [PATCH] Rename to UltraPaper
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 57f2c414dbfe127c193002fbc8eeb22e94e9cb55..1b3866baed683401bf29985e72edf0b0f2439643 100644
+index c187641f0ec6444a10e0e1583e1697d07e8f0267..e13ee6a8156faac0cef71a5d7e15e727b7d652fc 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -32,7 +32,7 @@ index 57f2c414dbfe127c193002fbc8eeb22e94e9cb55..1b3866baed683401bf29985e72edf0b0
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
-@@ -149,7 +153,7 @@ fun TaskContainer.registerRunTask(
+@@ -156,7 +160,7 @@ fun TaskContainer.registerRunTask(
      name: String,
      block: JavaExec.() -> Unit
  ): TaskProvider<JavaExec> = register<JavaExec>(name) {
@@ -42,10 +42,10 @@ index 57f2c414dbfe127c193002fbc8eeb22e94e9cb55..1b3866baed683401bf29985e72edf0b0
      standardInput = System.`in`
      workingDir = rootProject.layout.projectDirectory
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3238cbcba567b1242c77e41f6b6f19a8d157fb4e..1a6edddd03763a838207cad2300e201b8de7e4cb 100644
+index 97745f0bab8d82d397c6c2a5775aed92bca0a034..dbcba55683790bd0640f670fc47732173d7aeb26 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1693,7 +1693,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1697,7 +1697,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -55,10 +55,10 @@ index 3238cbcba567b1242c77e41f6b6f19a8d157fb4e..1a6edddd03763a838207cad2300e201b
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a05c1bc8874ef5e380544a6a344c848e37da49c4..deca74dc644043d724026366fba01141f7b59289 100644
+index fcd5096d64edfaf6bce3ecce8c9b9afb84462786..826a1fa5be551ee472177a2d4547116ef0cdcad0 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -264,7 +264,7 @@ import javax.annotation.Nullable; // Paper
+@@ -267,7 +267,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {

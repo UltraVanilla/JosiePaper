@@ -4,7 +4,8 @@ plugins {
 
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.5.5"
+    // id("io.papermc.paperweight.patcher") version "1.5.6"
+    id("io.papermc.paperweight.patcher")
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
