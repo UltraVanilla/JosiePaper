@@ -46,7 +46,7 @@ out/
 # other stuff
 run/
 
-ultrapaper-server
-ultrapaper-api
+josiepaper-server
+josiepaper-api
 
 !gradle/wrapper/gradle-wrapper.jar
