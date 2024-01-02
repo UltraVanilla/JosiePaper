@@ -55,7 +55,7 @@ subprojects {
 }
 
 paperweight {
-    serverProject.set(project(":ultrapaper-server"))
+    serverProject.set(project(":josiepaper-server"))
 
     remapRepo.set(paperMavenPublicUrl)
     decompileRepo.set(paperMavenPublicUrl)
@@ -63,10 +63,10 @@ paperweight {
     usePaperUpstream(providers.gradleProperty("paperRef")) {
         withPaperPatcher {
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
-            apiOutputDir.set(layout.projectDirectory.dir("ultrapaper-api"))
+            apiOutputDir.set(layout.projectDirectory.dir("josiepaper-api"))
 
             serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
-            serverOutputDir.set(layout.projectDirectory.dir("ultrapaper-server"))
+            serverOutputDir.set(layout.projectDirectory.dir("josiepaper-server"))
         }
     }
 }

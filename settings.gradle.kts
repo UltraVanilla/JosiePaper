@@ -5,6 +5,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "ultrapaper"
+rootProject.name = "josiepaper"
 
-include("ultrapaper-api", "ultrapaper-server")
+include("josiepaper-api", "josiepaper-server")
