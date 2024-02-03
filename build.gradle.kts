@@ -31,7 +31,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 }
@@ -39,7 +39,7 @@ allprojects {
 subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release = 17
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -55,18 +55,18 @@ subprojects {
 }
 
 paperweight {
-    serverProject.set(project(":josiepaper-server"))
+    serverProject = project(":josiepaper-server")
 
-    remapRepo.set(paperMavenPublicUrl)
-    decompileRepo.set(paperMavenPublicUrl)
+    remapRepo = paperMavenPublicUrl
+    decompileRepo = paperMavenPublicUrl
 
     usePaperUpstream(providers.gradleProperty("paperRef")) {
         withPaperPatcher {
-            apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
-            apiOutputDir.set(layout.projectDirectory.dir("josiepaper-api"))
+            apiPatchDir = layout.projectDirectory.dir("patches/api")
+            apiOutputDir = layout.projectDirectory.dir("josiepaper-api")
 
-            serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
-            serverOutputDir.set(layout.projectDirectory.dir("josiepaper-server"))
+            serverPatchDir = layout.projectDirectory.dir("patches/server")
+            serverOutputDir = layout.projectDirectory.dir("josiepaper-server")
         }
     }
 }

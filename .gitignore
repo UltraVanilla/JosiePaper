@@ -50,3 +50,10 @@ josiepaper-server
 josiepaper-api
 
 !gradle/wrapper/gradle-wrapper.jar
+
+bin/
+.settings/
+run/
+*.iml
+*.ipr
+.vim/

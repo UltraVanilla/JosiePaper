@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Josie
+Date: Fri, 2 Feb 2024 23:01:07 -0700
+Subject: [PATCH] Zstd compressed region files
+
+diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+index 6eaeb2db0da59611501f2b1a63b5b48816a0ba48..3d22942e2f0e064ae59e4f15e4b10441250a8f08 100644
+--- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
++++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+@@ -129,8 +129,24 @@ public class RegionFileStorage implements AutoCloseable {
+             // Paper - only create directory if not existing only - moved down
+             Path path = this.folder;
+             int j = chunkcoordintpair.getRegionX();
+-            Path path1 = path.resolve("r." + j + "." + chunkcoordintpair.getRegionZ() + ".mca"); // Paper - diff on change
+-            if (existingOnly && !java.nio.file.Files.exists(path1)) { // Paper start - cache regionfile does not exist state
++            String regionFileName = "r." + j + "." + chunkcoordintpair.getRegionZ() + ".mca";
++            Path path1 = path.resolve(regionFileName); // Paper - diff on change
++            boolean alreadyExists = java.nio.file.Files.exists(path1);
++            if (!alreadyExists) {
++                Path compressedPath = path.resolve(regionFileName + ".zst");
++
++                if (java.nio.file.Files.exists(compressedPath)) {
++                    Process decompressProcess = new java.lang.ProcessBuilder("./config/region-archive", "unpack", compressedPath.toString()).start();
++                    try {
++                        int exitCode = decompressProcess.waitFor();
++                        if (exitCode != 0) throw new RuntimeException("Cannot decompress region - exit code " + exitCode);
++                    } catch (InterruptedException error) {
++                        throw new RuntimeException("Cannot decompress region - interrupted by another thread");
++                    }
++                    alreadyExists = true;
++                }
++            }
++            if (existingOnly && !alreadyExists) { // Paper start - cache regionfile does not exist state
+                 this.markNonExisting(regionPos);
+                 return null; // CraftBukkit
+             } else {
