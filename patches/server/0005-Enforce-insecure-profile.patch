@@ -5,37 +5,53 @@ Subject: [PATCH] Enforce insecure profile
 
 
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ServerboundChatPacket.java b/src/main/java/net/minecraft/network/protocol/game/ServerboundChatPacket.java
-index d1d2fc0c57523c1abf1e8bfec913c78927c3dafc..e956f8e1bd7ddb609c118679f20de8b696605c0c 100644
+index d1d2fc0c57523c1abf1e8bfec913c78927c3dafc..0ed92a22dc896fd21d7326bb089fe044f656e6ec 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ServerboundChatPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ServerboundChatPacket.java
-@@ -9,7 +9,8 @@ import net.minecraft.network.protocol.Packet;
+@@ -8,8 +8,14 @@ import net.minecraft.network.chat.MessageSignature;
+ import net.minecraft.network.protocol.Packet;
  
  public record ServerboundChatPacket(String message, Instant timeStamp, long salt, @Nullable MessageSignature signature, LastSeenMessages.Update lastSeenMessages) implements Packet<ServerGamePacketListener> {
++    // Enforce insecure profile start
++    private static final boolean CHAT_SIGNING = Boolean.getBoolean("chat.signing.off");
++    private static MessageSignature signatureWrapper(MessageSignature input) {
++        return CHAT_SIGNING ? input : null;
++    }
++    // Enforce insecure profile end
      public ServerboundChatPacket(FriendlyByteBuf buf) {
 -        this(buf.readUtf(256), buf.readInstant(), buf.readLong(), buf.readNullable(MessageSignature::read), new LastSeenMessages.Update(buf));
-+        // parse signature in the correct order but save it as null
-+        this(buf.readUtf(256), buf.readInstant(), buf.readLong(), (buf.readNullable(MessageSignature::read) == null) ? null : null, new LastSeenMessages.Update(buf));
++        this(buf.readUtf(256), buf.readInstant(), buf.readLong(), signatureWrapper(buf.readNullable(MessageSignature::read)), new LastSeenMessages.Update(buf)); //Enforce insecure profile
      }
  
      @Override
-@@ -17,7 +18,7 @@ public record ServerboundChatPacket(String message, Instant timeStamp, long salt
+@@ -17,7 +23,13 @@ public record ServerboundChatPacket(String message, Instant timeStamp, long salt
          buf.writeUtf(this.message, 256);
          buf.writeInstant(this.timeStamp);
          buf.writeLong(this.salt);
 -        buf.writeNullable(this.signature, MessageSignature::write);
-+        buf.writeNullable(null, MessageSignature::write);
++        // Enforce insecure profile start
++        if (CHAT_SIGNING) {
++            buf.writeNullable(null, MessageSignature::write);
++        } else {
++            buf.writeNullable(this.signature, MessageSignature::write);
++        }
++        // Enforce insecure profile end
          this.lastSeenMessages.write(buf);
      }
  
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ServerboundChatSessionUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ServerboundChatSessionUpdatePacket.java
-index 9d6db4a378036559efab91c8b7dcf2a6b0c2cce6..9a812cc5927b7cde5fc63f1ca2bfe0e2ab665f82 100644
+index 9d6db4a378036559efab91c8b7dcf2a6b0c2cce6..4dcc6b83d76cb358324c339996fc9ca7b400184d 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ServerboundChatSessionUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ServerboundChatSessionUpdatePacket.java
-@@ -16,6 +16,6 @@ public record ServerboundChatSessionUpdatePacket(RemoteChatSession.Data chatSess
+@@ -16,6 +16,10 @@ public record ServerboundChatSessionUpdatePacket(RemoteChatSession.Data chatSess
  
      @Override
      public void handle(ServerGamePacketListener listener) {
 -        listener.handleChatSessionUpdate(this);
-+        // do not read the player's session data
++        // Enforce insecure profile start
++        if (!Boolean.getBoolean("chat.signing.off")) {
++            listener.handleChatSessionUpdate(this);
++        }
++        // Enforce insecure profile end
      }
  }
