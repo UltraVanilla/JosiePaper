@@ -33,7 +33,7 @@ index 158184b1281c7199d315a0f39c38258fdb801772..0fb515d6d157e1250547446f62d1257b
                  return null;
              }
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileVersion.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileVersion.java
-index 5c0e32afbdd0e003ae1a8fefb2b0fc03a82790cc..53c75cea2e0f00387ce6f4e1cab9b0fa1a908089 100644
+index 5c0e32afbdd0e003ae1a8fefb2b0fc03a82790cc..18de9062723663517d931bcc26371bbbcb6e5c10 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileVersion.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileVersion.java
 @@ -10,6 +10,8 @@ import java.io.BufferedOutputStream;
@@ -66,7 +66,7 @@ index 5c0e32afbdd0e003ae1a8fefb2b0fc03a82790cc..53c75cea2e0f00387ce6f4e1cab9b0fa
 +    private static byte[] ZSTD_DICT;
 +    static {
 +        try {
-+            ZSTD_DICT = RegionFileVersion.class.getClassLoader().getResourceAsStream("data/paper/zstd-dictionary").readAllBytes();
++            ZSTD_DICT = RegionFileVersion.class.getClassLoader().getResourceAsStream("josie/zstd-dictionary").readAllBytes();
 +        } catch (IOException err) {
 +            throw new RuntimeException(err);
 +        }
@@ -88,7 +88,7 @@ index 5c0e32afbdd0e003ae1a8fefb2b0fc03a82790cc..53c75cea2e0f00387ce6f4e1cab9b0fa
      public static final RegionFileVersion DEFAULT;
      private static volatile RegionFileVersion selected;
      @Nullable private final String optionName;
-diff --git a/src/main/resources/zstd-dictionary b/src/main/resources/zstd-dictionary
+diff --git a/src/main/resources/josie/zstd-dictionary b/src/main/resources/josie/zstd-dictionary
 new file mode 100644
 index 0000000000000000000000000000000000000000..a6badf04df35f0394361f530b459f2a9853f162d
 GIT binary patch
