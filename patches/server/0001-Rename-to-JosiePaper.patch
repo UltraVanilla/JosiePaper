@@ -5,7 +5,7 @@ Subject: [PATCH] Rename to JosiePaper
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..13a1e310c34aedf700669c8fcad003ff579f1d20 100644
+index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..0a00dc0d5443c248fc52bf14b2be67773336ccd5 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,12 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -42,10 +42,11 @@ index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..13a1e310c34aedf700669c8fcad003ff
      standardInput = System.`in`
      workingDir = rootProject.layout.projectDirectory
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index d06185566b447c432d4dc2e3ba04d121bcdbc71b..d919925fad5e5fb83ae04e8383b101179a1ae364 100644
+index d06185566b447c432d4dc2e3ba04d121bcdbc71b..58e65a559f267a4ae16440613a1fbaf6a21bf599 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1856,6 +1856,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1855,7 +1855,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+ 
      @DontObfuscate
      public String getServerModName() {
 -        return "Paper"; // Paper

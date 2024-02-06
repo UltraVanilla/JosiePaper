@@ -48,6 +48,7 @@ run/
 
 josiepaper-server
 josiepaper-api
+paper-api-generator
 
 !gradle/wrapper/gradle-wrapper.jar
 

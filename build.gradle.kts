@@ -68,5 +68,20 @@ paperweight {
             serverPatchDir = layout.projectDirectory.dir("patches/server")
             serverOutputDir = layout.projectDirectory.dir("josiepaper-server")
         }
+        patchTasks.register("generatedApi") {
+            isBareDirectory = true
+            upstreamDirPath = "paper-api-generator/generated"
+            patchDir = layout.projectDirectory.dir("patches/generatedApi")
+            outputDir = layout.projectDirectory.dir("paper-api-generator/generated")
+        }
     }
+}
+
+tasks.generateDevelopmentBundle {
+    apiCoordinates = "josie.paper:josiepaper-api"
+    mojangApiCoordinates = "io.papermc.paper:paper-mojangapi"
+    libraryRepositories = listOf(
+        "https://repo.maven.apache.org/maven2/",
+        paperMavenPublicUrl,
+    )
 }

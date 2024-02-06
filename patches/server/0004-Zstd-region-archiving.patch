@@ -1,10 +1,11 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Josie
+From: josie <josiebot@ultravanilla.world>
 Date: Fri, 2 Feb 2024 23:01:07 -0700
-Subject: [PATCH] Zstd compressed region files
+Subject: [PATCH] Zstd region archiving
+
 
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 6eaeb2db0da59611501f2b1a63b5b48816a0ba48..3d22942e2f0e064ae59e4f15e4b10441250a8f08 100644
+index fe312b1aef579cb4bf81bdd967cf72ff880d7505..1d561ac0b489df4e148475d9eeb1ceecfe0237ca 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 @@ -129,8 +129,24 @@ public class RegionFileStorage implements AutoCloseable {
