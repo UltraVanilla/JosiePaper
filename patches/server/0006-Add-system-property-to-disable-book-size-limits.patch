@@ -13,18 +13,18 @@ limiting incoming data from packets in some other way.
 Removed in 1.17: It was from a different time before books were as jank as they are now. As time has gone on they've only proven to be worse and worse.
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-index 6d85237b21650edf1d2dc71abaf0edbe7a8aef6b..1ebb46a774e01e76b34359a7b6f8ebe85c660961 100644
+index c5d1ba7a1be3f102edcdfdc05fc50b30ef1f775b..ca81c82eef793f3a9a7beaf3aef74743c3f45c1d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBook.java
-@@ -38,6 +38,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
-     static final int MAX_PAGES = 100;
-     static final int MAX_PAGE_LENGTH = 320; // 256 limit + 64 characters to allow for psuedo colour codes
-     static final int MAX_TITLE_LENGTH = 32;
+@@ -39,6 +39,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+     static final int MAX_PAGES = WrittenBookItem.MAX_PAGES; // SPIGOT-6911: Use Minecraft limits
+     static final int MAX_PAGE_LENGTH = WrittenBookItem.PAGE_EDIT_LENGTH; // SPIGOT-6911: Use Minecraft limits
+     static final int MAX_TITLE_LENGTH = WrittenBookItem.TITLE_MAX_LENGTH; // SPIGOT-6911: Use Minecraft limits
 +    private static final boolean OVERRIDE_CHECKS = Boolean.getBoolean("disable.book-limits"); // Paper - Add override
  
      protected String title;
      protected String author;
-@@ -234,7 +235,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -235,7 +236,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          if (title == null) {
              this.title = null;
              return true;
@@ -33,7 +33,7 @@ index 6d85237b21650edf1d2dc71abaf0edbe7a8aef6b..1ebb46a774e01e76b34359a7b6f8ebe8
              return false;
          }
  
-@@ -436,7 +437,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -437,7 +438,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
      String validatePage(String page) {
          if (page == null) {
              page = "";
@@ -42,7 +42,7 @@ index 6d85237b21650edf1d2dc71abaf0edbe7a8aef6b..1ebb46a774e01e76b34359a7b6f8ebe8
              page = page.substring(0, CraftMetaBook.MAX_PAGE_LENGTH);
          }
          return page;
-@@ -446,7 +447,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
+@@ -447,7 +448,7 @@ public class CraftMetaBook extends CraftMetaItem implements BookMeta {
          // asserted: page != null
          if (this.pages == null) {
              this.pages = new ArrayList<String>();
