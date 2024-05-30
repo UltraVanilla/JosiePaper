@@ -4,7 +4,7 @@ plugins {
 
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.5.11"
+    id("io.papermc.paperweight.patcher") version "1.5.15"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -18,9 +18,9 @@ repositories {
 
 dependencies {
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    remapper("net.fabricmc:tiny-remapper:0.8.10:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.1:fat")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    decompiler("net.minecraftforge:forgeflower:2.0.627.2")
+    decompiler("org.vineflower:vineflower:1.10.1")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
     paperclip("io.papermc:paperclip:3.0.3")
 }
