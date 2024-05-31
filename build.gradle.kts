@@ -1,10 +1,8 @@
 plugins {
     java
     `maven-publish`
-
-    id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.5.15"
+    id("io.papermc.paperweight.patcher") version "1.7.1"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -18,7 +16,7 @@ repositories {
 
 dependencies {
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    remapper("net.fabricmc:tiny-remapper:0.10.1:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.2:fat")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
     decompiler("org.vineflower:vineflower:1.10.1")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
@@ -31,7 +29,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 }
@@ -39,7 +37,7 @@ allprojects {
 subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 17
+        options.release = 21
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -79,7 +77,7 @@ paperweight {
 
 tasks.generateDevelopmentBundle {
     apiCoordinates = "josie.paper:josiepaper-api"
-    mojangApiCoordinates = "io.papermc.paper:paper-mojangapi"
+//    mojangApiCoordinates = "io.papermc.paper:paper-mojangapi"
     libraryRepositories = listOf(
         "https://repo.maven.apache.org/maven2/",
         paperMavenPublicUrl,
