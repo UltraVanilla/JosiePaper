@@ -1,6 +1,7 @@
 plugins {
     java
     `maven-publish`
+
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
     id("io.papermc.paperweight.patcher") version "1.7.1"
 }
@@ -16,7 +17,7 @@ repositories {
 
 dependencies {
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    remapper("net.fabricmc:tiny-remapper:0.10.2:fat")
+    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
     decompiler("org.vineflower:vineflower:1.10.1")
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
@@ -77,7 +78,6 @@ paperweight {
 
 tasks.generateDevelopmentBundle {
     apiCoordinates = "josie.paper:josiepaper-api"
-//    mojangApiCoordinates = "io.papermc.paper:paper-mojangapi"
     libraryRepositories = listOf(
         "https://repo.maven.apache.org/maven2/",
         paperMavenPublicUrl,
