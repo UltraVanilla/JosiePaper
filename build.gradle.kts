@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.7.1"
+    id("io.papermc.paperweight.patcher") version "1.7.3"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -78,8 +78,9 @@ paperweight {
 
 tasks.generateDevelopmentBundle {
     apiCoordinates = "josie.paper:josiepaper-api"
-    libraryRepositories = listOf(
-        "https://repo.maven.apache.org/maven2/",
-        paperMavenPublicUrl,
-    )
+    libraryRepositories =
+        listOf(
+            "https://repo.maven.apache.org/maven2/",
+            paperMavenPublicUrl,
+        )
 }
