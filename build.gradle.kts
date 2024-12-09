@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 
     // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.7.4"
+    id("io.papermc.paperweight.patcher") version "1.7.7"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
