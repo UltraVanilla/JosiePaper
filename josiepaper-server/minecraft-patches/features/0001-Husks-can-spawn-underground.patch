@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Thu, 16 Jan 2025 10:07:40 -0700
+Subject: [PATCH] Husks can spawn underground
+
+
+diff --git a/net/minecraft/world/entity/monster/Husk.java b/net/minecraft/world/entity/monster/Husk.java
+index 8d6def85583a111841b28f20f58ddb8b8cbd7bc1..b94f91a34ce15dfb7f0b31ea7662cc2ae215b8ed 100644
+--- a/net/minecraft/world/entity/monster/Husk.java
++++ b/net/minecraft/world/entity/monster/Husk.java
+@@ -24,7 +24,7 @@ public class Husk extends Zombie {
+     public static boolean checkHuskSpawnRules(
+         EntityType<Husk> entityType, ServerLevelAccessor level, EntitySpawnReason spawnReason, BlockPos pos, RandomSource random
+     ) {
+-        return checkMonsterSpawnRules(entityType, level, spawnReason, pos, random) && (EntitySpawnReason.isSpawner(spawnReason) || level.canSeeSky(pos));
++        return checkMonsterSpawnRules(entityType, level, spawnReason, pos, random);
+     }
+ 
+     @Override

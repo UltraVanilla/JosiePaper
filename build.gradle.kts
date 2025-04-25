@@ -1,44 +1,59 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
-    java
-    `maven-publish`
-
-    // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    id("io.papermc.paperweight.patcher") version "1.7.7"
+    id("io.papermc.paperweight.patcher") version "2.0.0-beta.16"
 }
 
-val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
+paperweight {
+    upstreams.paper {
+        ref = providers.gradleProperty("paperRef")
 
-repositories {
-    mavenCentral()
-    maven(paperMavenPublicUrl) {
-        content { onlyForConfigurations(configurations.paperclip.name) }
-    }
-}
-
-dependencies {
-    // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    remapper("net.fabricmc:tiny-remapper:0.10.3:fat")
-    // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    decompiler("org.vineflower:vineflower:1.10.1")
-    // keep in sync with upstream (https://github.com/PaperMC/Paper/blob/master/build.gradle.kts)
-    paperclip("io.papermc:paperclip:3.0.3")
-}
-
-allprojects {
-    apply(plugin = "java")
-    apply(plugin = "maven-publish")
-
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+        patchFile {
+            path = "paper-server/build.gradle.kts"
+            outputFile = file("josiepaper-server/build.gradle.kts")
+            patchFile = file("josiepaper-server/build.gradle.kts.patch")
+        }
+        patchFile {
+            path = "paper-api/build.gradle.kts"
+            outputFile = file("josiepaper-api/build.gradle.kts")
+            patchFile = file("josiepaper-api/build.gradle.kts.patch")
+        }
+        patchDir("paperApi") {
+            upstreamPath = "paper-api"
+            excludes = setOf("build.gradle.kts")
+            patchesDir = file("josiepaper-api/paper-patches")
+            outputDir = file("paper-api")
         }
     }
 }
 
+val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
+
 subprojects {
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+
+    extensions.configure<JavaPluginExtension> {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        maven(paperMavenPublicUrl)
+	mavenLocal()
+    }
+
+    tasks.withType<AbstractArchiveTask>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
         options.release = 21
+        options.isFork = true
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -46,41 +61,22 @@ subprojects {
     tasks.withType<ProcessResources> {
         filteringCharset = Charsets.UTF_8.name()
     }
-
-    repositories {
-        mavenCentral()
-        maven(paperMavenPublicUrl)
-    }
-}
-
-paperweight {
-    serverProject = project(":josiepaper-server")
-
-    remapRepo = paperMavenPublicUrl
-    decompileRepo = paperMavenPublicUrl
-
-    usePaperUpstream(providers.gradleProperty("paperRef")) {
-        withPaperPatcher {
-            apiPatchDir = layout.projectDirectory.dir("patches/api")
-            apiOutputDir = layout.projectDirectory.dir("josiepaper-api")
-
-            serverPatchDir = layout.projectDirectory.dir("patches/server")
-            serverOutputDir = layout.projectDirectory.dir("josiepaper-server")
-        }
-        patchTasks.register("generatedApi") {
-            isBareDirectory = true
-            upstreamDirPath = "paper-api-generator/generated"
-            patchDir = layout.projectDirectory.dir("patches/generatedApi")
-            outputDir = layout.projectDirectory.dir("paper-api-generator/generated")
+    tasks.withType<Test> {
+        testLogging {
+            showStackTraces = true
+            exceptionFormat = TestExceptionFormat.FULL
+            events(TestLogEvent.STANDARD_OUT)
         }
     }
-}
 
-tasks.generateDevelopmentBundle {
-    apiCoordinates = "josie.paper:josiepaper-api"
-    libraryRepositories =
-        listOf(
-            "https://repo.maven.apache.org/maven2/",
-            paperMavenPublicUrl,
-        )
+    extensions.configure<PublishingExtension> {
+        repositories {
+            /*
+            maven("https://repo.papermc.io/repository/maven-snapshots/") {
+                name = "paperSnapshots"
+                credentials(PasswordCredentials::class)
+            }
+             */
+        }
+    }
 }

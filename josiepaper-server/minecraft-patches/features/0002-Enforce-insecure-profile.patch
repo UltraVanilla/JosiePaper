@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Fri, 17 Jan 2025 06:01:34 -0700
+Subject: [PATCH] Enforce insecure profile
+
+
+diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
+index 19b66adfabe7653950f60a9e4b8bf7f432a8429e..8535d8c8bc8aa3734585e6c28a8b461e079acf24 100644
+--- a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
+@@ -45,7 +45,7 @@ public record ClientboundPlayerChatPacket(
+         buffer.writeVarInt(this.globalIndex);
+         buffer.writeUUID(this.sender);
+         buffer.writeVarInt(this.index);
+-        buffer.writeNullable(this.signature, MessageSignature::write);
++        buffer.writeNullable(null, MessageSignature::write);
+         this.body.write(buffer);
+         FriendlyByteBuf.writeNullable(buffer, this.unsignedContent, ComponentSerialization.TRUSTED_STREAM_CODEC);
+         FilterMask.write(buffer, this.filterMask);
+diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+index d13d67a3925f96a2a27159d303e8c19478971bd7..79fc96489e20f1ba6bc2ee9fe1370f9df4c4fd74 100644
+--- a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+@@ -173,7 +173,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
+                 if (chatSession != null && chatSession.profilePublicKey().hasExpired()) {
+                     chatSession = null;
+                 }
+-                buffer.writeNullable(chatSession, RemoteChatSession.Data::write);
++                buffer.writeNullable(null, RemoteChatSession.Data::write);
+             }
+             // Paper end - Prevent causing expired keys from impacting new joins
+         ),

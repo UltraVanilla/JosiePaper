@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Sun, 20 Apr 2025 21:47:16 -0600
+Subject: [PATCH] Revert broken nether portal hitbox MC-101556
+
+
+diff --git a/net/minecraft/world/level/block/NetherPortalBlock.java b/net/minecraft/world/level/block/NetherPortalBlock.java
+index 2f08780430fc643991ffb4aeba1f1ae8e78944d2..6c5629a6f5f91496a55eb0bf281ceae1567915b1 100644
+--- a/net/minecraft/world/level/block/NetherPortalBlock.java
++++ b/net/minecraft/world/level/block/NetherPortalBlock.java
+@@ -63,11 +63,6 @@ public class NetherPortalBlock extends Block implements Portal {
+         return SHAPES.get(state.getValue(AXIS));
+     }
+ 
+-    @Override
+-    protected VoxelShape getEntityInsideCollisionShape(BlockState state, BlockGetter level, BlockPos pos, Entity entity) {
+-        return state.getShape(level, pos);
+-    }
+-
+     @Override
+     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+         if (level.spigotConfig.enableZombiePigmenPortalSpawns && level.dimensionType().natural() // Spigot
