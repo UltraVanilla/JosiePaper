@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Sun, 20 Apr 2025 21:43:31 -0600
+Subject: [PATCH] Implement JosieAnvil region onloading
+
+
+diff --git a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+index 384f2cd090d6d23bd1308d6e82c24338f2bf55d1..30ce86fb6fbf12a7075fb1d0e4697c3b2a3fb515 100644
+--- a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
++++ b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
+@@ -116,7 +116,22 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+ 
+         final Path regionPath = this.folder.resolve(getRegionFileName(chunkX, chunkZ));
+ 
+-        if (!java.nio.file.Files.exists(regionPath)) {
++        boolean alreadyExists = java.nio.file.Files.exists(regionPath);
++
++        final Path offloadedIndicatorPath = this.folder.resolve(getRegionFileName(chunkX, chunkZ) + ".offloaded");
++
++        if (!alreadyExists && java.nio.file.Files.exists(offloadedIndicatorPath) && josieAnvilOffloader != null) {
++            josieAnvilOffloader.download(regionPath.toString());
++
++            if (!java.nio.file.Files.exists(regionPath)) {
++                throw new RuntimeException("Cannot on-load region - josieanvil returned nothing");
++            }
++            //java.nio.file.Files.delete(offloadedIndicatorPath);
++            alreadyExists = true;
++            net.minecraft.server.MinecraftServer.LOGGER.info("[josieanvil] onloaded " + regionPath.toString() + " at time " + System.currentTimeMillis());
++        }
++
++        if (!alreadyExists) {
+             this.markNonExisting(key);
+             return null;
+         }
+@@ -470,4 +485,39 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+         }
+     }
+     // Paper end - don't write garbage data to disk if writing serialization fails
++
++    static josie.anvil.Offloader josieAnvilOffloader;
++    static {
++        var path = java.nio.file.Paths.get(".josieanvil.properties");
++
++        try (var in = java.nio.file.Files.newInputStream(path)) {
++            var props = new java.util.Properties();
++            props.load(in);
++            var s3AccessKeyId = props.getProperty("s3AccessKeyId");
++            var s3SecretAccessKey = props.getProperty("s3SecretAccessKey");
++            var s3BucketName = props.getProperty("s3BucketName");
++            var s3Region = props.getProperty("s3Region");
++            var s3EndpointUrl = props.getProperty("s3EndpointUrl");
++            var remoteBasePath = props.getProperty("remoteBasePath");
++            var chunkCompressionAlgorithm = props.getProperty("chunkCompressionAlgorithm");
++
++            var dryRunLocal = props.getProperty("dryRunLocal");
++            var dryRunRemote = props.getProperty("dryRunRemote");
++
++            var enableOffloading = props.getProperty("enableOffloading");
++            var sizeTarget = props.getProperty("sizeTarget");
++            var minKeepRegions = props.getProperty("minKeepRegions");
++            var maxOffloadRegions = props.getProperty("maxOffloadRegions");
++
++            var parsedAlgorithm = java.util.Arrays.stream(chunkCompressionAlgorithm.split(",")).mapToInt(Integer::parseInt).collect(() -> new java.io.ByteArrayOutputStream(), (baos, i) -> baos.write((byte)i), (a, b) -> { try { b.writeTo(a); } catch (IOException e) {} }).toByteArray();
++            josieAnvilOffloader = new josie.anvil.Offloader(s3AccessKeyId, s3SecretAccessKey, s3BucketName, s3Region,
++                s3EndpointUrl, null, remoteBasePath, parsedAlgorithm, Boolean.parseBoolean(dryRunLocal), Boolean.parseBoolean(dryRunRemote));
++
++            if (Boolean.parseBoolean(enableOffloading)) {
++                josieAnvilOffloader.uploadUntilSizeTarget(Long.parseLong(sizeTarget), Long.parseLong(minKeepRegions), Long.parseLong(maxOffloadRegions));
++            }
++        } catch (IOException e) {
++            LOGGER.error("Could not read JosieAnvil offloader configuration -- disabling JosieAnvil. This will corrupt your world!");
++        }
++    }
+ }
