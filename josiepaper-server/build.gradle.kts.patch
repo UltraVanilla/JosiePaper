@@ -50,7 +50,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -212,7 +_,7 @@
+@@ -207,7 +_,7 @@
              "Specification-Version" to project.version,
              "Specification-Vendor" to "Paper Team",
              "Brand-Id" to "papermc:paper",
@@ -59,7 +59,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -271,7 +_,7 @@
+@@ -266,7 +_,7 @@
      jvmArgumentProviders.add(provider)
  }
  
