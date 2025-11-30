@@ -5,10 +5,10 @@ Subject: [PATCH] Implement JosieAnvil region onloading
 
 
 diff --git a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 384f2cd090d6d23bd1308d6e82c24338f2bf55d1..30ce86fb6fbf12a7075fb1d0e4697c3b2a3fb515 100644
+index 8ea830f561f5b7d6ff6ca3c38adc7fe8e54e4cc7..fbae3c641b0b1a6a34a77c65a5fbd95bdd246000 100644
 --- a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -116,7 +116,22 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -117,7 +117,22 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
  
          final Path regionPath = this.folder.resolve(getRegionFileName(chunkX, chunkZ));
  
@@ -32,7 +32,7 @@ index 384f2cd090d6d23bd1308d6e82c24338f2bf55d1..30ce86fb6fbf12a7075fb1d0e4697c3b
              this.markNonExisting(key);
              return null;
          }
-@@ -470,4 +485,39 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -473,4 +488,39 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
          }
      }
      // Paper end - don't write garbage data to disk if writing serialization fails

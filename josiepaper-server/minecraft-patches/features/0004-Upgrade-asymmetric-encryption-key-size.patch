@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Sun, 30 Nov 2025 11:29:47 -0700
+Subject: [PATCH] Upgrade asymmetric encryption key size
+
+
+diff --git a/net/minecraft/util/Crypt.java b/net/minecraft/util/Crypt.java
+index a75cf74eebe99341a039bea54400ff640aaa6b83..1a04f4b682e23a0617224593cda100fd21345bc5 100644
+--- a/net/minecraft/util/Crypt.java
++++ b/net/minecraft/util/Crypt.java
+@@ -29,7 +29,7 @@ public class Crypt {
+     private static final String SYMMETRIC_ALGORITHM = "AES";
+     private static final int SYMMETRIC_BITS = 128;
+     private static final String ASYMMETRIC_ALGORITHM = "RSA";
+-    private static final int ASYMMETRIC_BITS = 1024;
++    private static final int ASYMMETRIC_BITS = 4096;
+     private static final String BYTE_ENCODING = "ISO_8859_1";
+     private static final String HASH_ALGORITHM = "SHA-1";
+     public static final String SIGNING_ALGORITHM = "SHA256withRSA";
+@@ -68,7 +68,7 @@ public class Crypt {
+     public static KeyPair generateKeyPair() throws CryptException {
+         try {
+             KeyPairGenerator instance = KeyPairGenerator.getInstance("RSA");
+-            instance.initialize(1024);
++            instance.initialize(4096);
+             return instance.generateKeyPair();
+         } catch (Exception var1) {
+             throw new CryptException(var1);

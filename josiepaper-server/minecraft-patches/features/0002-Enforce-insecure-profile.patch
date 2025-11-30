@@ -18,10 +18,10 @@ index 19b66adfabe7653950f60a9e4b8bf7f432a8429e..8535d8c8bc8aa3734585e6c28a8b461e
          FriendlyByteBuf.writeNullable(buffer, this.unsignedContent, ComponentSerialization.TRUSTED_STREAM_CODEC);
          FilterMask.write(buffer, this.filterMask);
 diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index d13d67a3925f96a2a27159d303e8c19478971bd7..79fc96489e20f1ba6bc2ee9fe1370f9df4c4fd74 100644
+index 1d91d7501c562704ba8f9b3726fa6c9d1d3031ac..777e84c68011f36637f52e357ad561cdc1eadb7d 100644
 --- a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-@@ -173,7 +173,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
+@@ -174,7 +174,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
                  if (chatSession != null && chatSession.profilePublicKey().hasExpired()) {
                      chatSession = null;
                  }
