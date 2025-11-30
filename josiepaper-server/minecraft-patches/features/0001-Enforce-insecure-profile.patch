@@ -5,7 +5,7 @@ Subject: [PATCH] Enforce insecure profile
 
 
 diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
-index 19b66adfabe7653950f60a9e4b8bf7f432a8429e..8535d8c8bc8aa3734585e6c28a8b461e079acf24 100644
+index 3ee2510f31cd8f09883d48fcc7ab502c3614ee7f..4af139cf1af728a0071f0972e8cfc2269537ab8e 100644
 --- a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
 @@ -45,7 +45,7 @@ public record ClientboundPlayerChatPacket(
@@ -18,7 +18,7 @@ index 19b66adfabe7653950f60a9e4b8bf7f432a8429e..8535d8c8bc8aa3734585e6c28a8b461e
          FriendlyByteBuf.writeNullable(buffer, this.unsignedContent, ComponentSerialization.TRUSTED_STREAM_CODEC);
          FilterMask.write(buffer, this.filterMask);
 diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 1d91d7501c562704ba8f9b3726fa6c9d1d3031ac..777e84c68011f36637f52e357ad561cdc1eadb7d 100644
+index 8212337ab7c30491926f50a9a9fa1f0451c06b47..8aba81bf1b296ae8b039720b35ed4bc92d064ff2 100644
 --- a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -174,7 +174,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
