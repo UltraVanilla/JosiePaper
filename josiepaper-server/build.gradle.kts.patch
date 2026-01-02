@@ -1,9 +1,9 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -28,6 +_,17 @@
-         packageVersion = "v1_21_R6" // also needs to be updated in MappingEnvironment
+@@ -27,6 +_,17 @@
+         buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
+         packageVersion = "v1_21_R7" // also needs to be updated in MappingEnvironment
      }
- 
 +    val fork = forks.register("josiepaper") {
 +        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
@@ -15,9 +15,9 @@
 +
 +    activeFork = fork
 +
+ 
      reobfPackagesToFix.addAll(
          "co.aikar.timings",
-         "com.destroystokyo.paper",
 @@ -104,7 +_,21 @@
      }
  }
@@ -48,7 +48,7 @@
 -    implementation(project(":paper-api"))
 +    implementation(project(":josiepaper-api"))
 +    implementation("josie.anvil:JosieAnvil:1.0.0")
-     implementation("ca.spottedleaf:concurrentutil:0.0.7")
+     implementation("ca.spottedleaf:concurrentutil:0.0.8")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
 @@ -205,7 +_,7 @@
