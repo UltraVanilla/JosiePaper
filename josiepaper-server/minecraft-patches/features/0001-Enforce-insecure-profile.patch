@@ -5,28 +5,28 @@ Subject: [PATCH] Enforce insecure profile
 
 
 diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
-index 3ee2510f31cd8f09883d48fcc7ab502c3614ee7f..4af139cf1af728a0071f0972e8cfc2269537ab8e 100644
+index 7cd03722e45631ee8f1118dddf464510343313ed..75caebb3b8ce35f43c1500f6c14df4bdd07f7770 100644
 --- a/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundPlayerChatPacket.java
 @@ -45,7 +45,7 @@ public record ClientboundPlayerChatPacket(
-         buffer.writeVarInt(this.globalIndex);
-         buffer.writeUUID(this.sender);
-         buffer.writeVarInt(this.index);
--        buffer.writeNullable(this.signature, MessageSignature::write);
-+        buffer.writeNullable(null, MessageSignature::write);
-         this.body.write(buffer);
-         FriendlyByteBuf.writeNullable(buffer, this.unsignedContent, ComponentSerialization.TRUSTED_STREAM_CODEC);
-         FilterMask.write(buffer, this.filterMask);
+         output.writeVarInt(this.globalIndex);
+         output.writeUUID(this.sender);
+         output.writeVarInt(this.index);
+-        output.writeNullable(this.signature, MessageSignature::write);
++        output.writeNullable(null, MessageSignature::write);
+         this.body.write(output);
+         FriendlyByteBuf.writeNullable(output, this.unsignedContent, ComponentSerialization.TRUSTED_STREAM_CODEC);
+         FilterMask.write(output, this.filterMask);
 diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 8212337ab7c30491926f50a9a9fa1f0451c06b47..8aba81bf1b296ae8b039720b35ed4bc92d064ff2 100644
+index aaa497096f07f2ef9da62b9760f5c9aa0b0263d3..d319a229296496869f34e138332837ef11c5f15e 100644
 --- a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -174,7 +174,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
                  if (chatSession != null && chatSession.profilePublicKey().hasExpired()) {
                      chatSession = null;
                  }
--                buffer.writeNullable(chatSession, RemoteChatSession.Data::write);
-+                buffer.writeNullable(null, RemoteChatSession.Data::write);
+-                output.writeNullable(chatSession, RemoteChatSession.Data::write);
++                output.writeNullable(null, RemoteChatSession.Data::write);
              }
              // Paper end - Prevent causing expired keys from impacting new joins
          ),

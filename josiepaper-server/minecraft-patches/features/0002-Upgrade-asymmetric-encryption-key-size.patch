@@ -5,7 +5,7 @@ Subject: [PATCH] Upgrade asymmetric encryption key size
 
 
 diff --git a/net/minecraft/util/Crypt.java b/net/minecraft/util/Crypt.java
-index a75cf74eebe99341a039bea54400ff640aaa6b83..1a04f4b682e23a0617224593cda100fd21345bc5 100644
+index e76431d60db9d39e93dc51fdc07b0b1e6c06be21..58a4292f66755728b26efbed0899451d643157f3 100644
 --- a/net/minecraft/util/Crypt.java
 +++ b/net/minecraft/util/Crypt.java
 @@ -29,7 +29,7 @@ public class Crypt {
@@ -20,9 +20,9 @@ index a75cf74eebe99341a039bea54400ff640aaa6b83..1a04f4b682e23a0617224593cda100fd
 @@ -68,7 +68,7 @@ public class Crypt {
      public static KeyPair generateKeyPair() throws CryptException {
          try {
-             KeyPairGenerator instance = KeyPairGenerator.getInstance("RSA");
--            instance.initialize(1024);
-+            instance.initialize(4096);
-             return instance.generateKeyPair();
-         } catch (Exception var1) {
-             throw new CryptException(var1);
+             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+-            generator.initialize(1024);
++            generator.initialize(4096);
+             return generator.generateKeyPair();
+         } catch (Exception e) {
+             throw new CryptException(e);
