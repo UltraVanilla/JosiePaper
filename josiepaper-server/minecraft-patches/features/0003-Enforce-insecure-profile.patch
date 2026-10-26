@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: lordofpipes <lordpipe@protonmail.com>
+Date: Mon, 26 Oct 2026 07:33:59 -0600
+Subject: [PATCH] Enforce insecure profile
+
+
+diff --git a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+index 30ad3b38b329fb8118ca3ce39f5959bc09c4540f..e6a9b3d945eb4bc27970d8fc4346ccc8d78b28ed 100644
+--- a/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+@@ -184,7 +184,7 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
+             if (chatSession != null && chatSession.profilePublicKey().hasExpired()) {
+                 chatSession = null;
+             }
+-            output.writeNullable(chatSession, RemoteChatSession.Data.STREAM_CODEC);
++            output.writeNullable(null, RemoteChatSession.Data.STREAM_CODEC);
+         }
+         // Paper end - Prevent causing expired keys from impacting new joins
+         ),
+diff --git a/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 8178922f5ecc7f6709335c7fbeb6dca505b044bb..0b3e34195db7267b514f005fd2f5e2bc96e0201e 100644
+--- a/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -2835,7 +2835,7 @@ public class ServerGamePacketListenerImpl
+                 this.nextChatIndex++,
+                 message.link().sender(),
+                 message.link().index(),
+-                Optional.ofNullable(message.signature()),
++                Optional.empty(),
+                 message.signedBody().pack(this.messageSignatureCache),
+                 Optional.ofNullable(message.unsignedContent()),
+                 message.filterMask(),

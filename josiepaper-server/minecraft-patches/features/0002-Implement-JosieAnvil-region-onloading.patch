@@ -5,21 +5,21 @@ Subject: [PATCH] Implement JosieAnvil region onloading
 
 
 diff --git a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-index 63b40c420030d935bb81a219fb33defe0946e21f..2ad5d73c69eaee8ffe8b630eb7fe12ba547d794a 100644
+index 7e815fee19ab2c283bf1fdc3d6a530d4101de3de..7f3230eb20a219ee76428a1b6a9c31afec2d71f5 100644
 --- a/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
 +++ b/net/minecraft/world/level/chunk/storage/RegionFileStorage.java
-@@ -115,7 +115,9 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
+@@ -248,7 +248,9 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
  
-         final Path regionPath = this.folder.resolve(getRegionFileName(chunkX, chunkZ));
+             final Path regionPath = this.folder.resolve(getRegionFileName(pos.x(), pos.z()));
  
--        if (!java.nio.file.Files.exists(regionPath)) {
-+        boolean alreadyExists = handleJosieAnvilRegionLoad(regionPath, this.folder, chunkX, chunkZ);
+-            if (!create && !Files.isRegularFile(regionPath)) {
++            boolean nonExisting = !create && !handleJosieAnvilRegionLoad(regionPath, this.folder, pos.x(), pos.z());
 +
-+        if (!alreadyExists) {
-             this.markNonExisting(key);
-             return null;
-         }
-@@ -471,4 +473,62 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
++            if (nonExisting) {
+                 // unlike vanilla, do not cache Optional.empty() here: missing regions are tracked in
+                 // nonExistingRegionFiles so that a read miss cannot evict a live RegionFile from the cache
+                 this.markNonExisting(key);
+@@ -410,4 +412,62 @@ public class RegionFileStorage implements AutoCloseable, ca.spottedleaf.moonrise
          }
      }
      // Paper end - don't write garbage data to disk if writing serialization fails
@@ -64,21 +64,21 @@ index 63b40c420030d935bb81a219fb33defe0946e21f..2ad5d73c69eaee8ffe8b630eb7fe12ba
 +        }
 +    }
 +    private static boolean handleJosieAnvilRegionLoad(final Path regionPath, final Path folder, final int chunkX, final int chunkZ) throws IOException {
-+        boolean alreadyExists = java.nio.file.Files.exists(regionPath);
++        boolean exists = java.nio.file.Files.isRegularFile(regionPath);
 +
 +        final Path offloadedIndicatorPath = folder.resolve(getRegionFileName(chunkX, chunkZ) + ".offloaded");
 +
-+        if (!alreadyExists && java.nio.file.Files.exists(offloadedIndicatorPath) && josieAnvilOffloader != null) {
++        if (!exists && java.nio.file.Files.exists(offloadedIndicatorPath) && josieAnvilOffloader != null) {
 +            josieAnvilOffloader.download(regionPath.toString());
 +
 +            if (!java.nio.file.Files.exists(regionPath)) {
 +                throw new RuntimeException("Cannot on-load region - josieanvil returned nothing");
 +            }
 +
-+            alreadyExists = true;
++            exists = true;
 +            net.minecraft.server.MinecraftServer.LOGGER.info("[josieanvil] onloaded " + regionPath.toString() + " at time " + System.currentTimeMillis());
 +        }
 +
-+        return alreadyExists;
++        return exists;
 +    }
  }
